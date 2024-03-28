@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using TMPro;
 
 public class Node_Skill_Tree : MonoBehaviour
 {
@@ -8,6 +9,8 @@ public class Node_Skill_Tree : MonoBehaviour
     LineRenderer lineRenderer;
     [SerializeField] public List<Node_Skill_Tree> ChildNodes = new List<Node_Skill_Tree>();
     [SerializeField] SpriteRenderer Sprite;
+    [SerializeField] TMP_Text Bufftext;
+    [SerializeField] int HPBuff = 1;
 
     public enum NodeState
     {
@@ -20,6 +23,7 @@ public class Node_Skill_Tree : MonoBehaviour
 
     private void Awake()
     {
+        Bufftext.text = $"+{HPBuff}";
         if (ParentNode != null)
         {
             ParentNode.ChildNodes.Add(this);
@@ -59,6 +63,7 @@ public class Node_Skill_Tree : MonoBehaviour
                 Sprite.color = Color.yellow;
                 break;
             case NodeState.Claimed:
+                HP_Script.BonusHP += HPBuff;
                 Sprite.color = Color.green;
                 break;
             case NodeState.Locked:
