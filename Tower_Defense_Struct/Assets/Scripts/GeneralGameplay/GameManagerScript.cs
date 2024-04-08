@@ -15,7 +15,11 @@ public class GameManagerScript : MonoBehaviour
         {
             for (int y = 0; y < YMap; y++)
             {
-                Instantiate(GameTilePrefab, new Vector3(x, y, 0), Quaternion.identity);
+                var tile = Instantiate(GameTilePrefab, new Vector3(x, y, 0), Quaternion.identity);
+                if( (x + y) % 2 == 0)
+                {
+                    tile.GetComponent<GameTileScript>().TurnGrey();
+                }
             }
         }
     }
