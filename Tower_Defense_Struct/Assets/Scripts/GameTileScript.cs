@@ -7,6 +7,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 {
     private SpriteRenderer spriteRenderer;
     [SerializeField] SpriteRenderer HoverRenderer;
+    [SerializeField] SpriteRenderer SpawnerRenderer;
 
     private void Awake()
     {
@@ -28,5 +29,10 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         HoverRenderer.enabled = false;
         Debug.Log("exit");
+    }
+
+    internal void SetEnemySpawn()
+    {
+        SpawnerRenderer.enabled = true;
     }
 }
