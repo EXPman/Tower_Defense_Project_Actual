@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler
+public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
 {
     private SpriteRenderer spriteRenderer;
     [SerializeField] SpriteRenderer HoverRenderer;
@@ -31,8 +31,14 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         Debug.Log("exit");
     }
 
+<<<<<<< Updated upstream
     internal void SetEnemySpawn()
     {
         SpawnerRenderer.enabled = true;
+=======
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        Debug.Log("Click");
+>>>>>>> Stashed changes
     }
 }
