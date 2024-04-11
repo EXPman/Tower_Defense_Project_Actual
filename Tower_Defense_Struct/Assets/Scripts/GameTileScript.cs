@@ -31,14 +31,15 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         Debug.Log("exit");
     }
 
-<<<<<<< Updated upstream
+
     internal void SetEnemySpawn()
     {
         SpawnerRenderer.enabled = true;
-=======
+
+    }
     public void OnPointerClick(PointerEventData eventData)
     {
         Debug.Log("Click");
->>>>>>> Stashed changes
+
     }
 }
