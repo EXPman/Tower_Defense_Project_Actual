@@ -6,13 +6,21 @@ using UnityEngine.EventSystems;
 public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     private SpriteRenderer spriteRenderer;
+    private Color originalColor;
+
     [SerializeField] SpriteRenderer HoverRenderer;
     [SerializeField] SpriteRenderer TurretRenderer;
     [SerializeField] SpriteRenderer SpawnerRenderer;
 
+    public GameManagerScript GM { get; internal set; }
+    public int X { get; internal set; }
+    public int Y { get; internal set; }
+    public bool IsBlocked { get; private set; }
+
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        originalColor = spriteRenderer.color;
     }
 
     internal void TurnGrey()
@@ -23,6 +31,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public void OnPointerEnter(PointerEventData eventData)
     {
         HoverRenderer.enabled = true;
+        GM.TargetTile = this;
         Debug.Log("enter");
     }
 
@@ -43,5 +52,9 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         TurretRenderer.enabled = !TurretRenderer.enabled;
     }
-
+    
+    internal void SetPath(bool isPath)
+    {
+        spriteRenderer.color = isPath ? Color.green : originalColor;
+    }
 }
