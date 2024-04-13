@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class GameManagerScript : MonoBehaviour
@@ -10,11 +11,12 @@ public class GameManagerScript : MonoBehaviour
     GameTileScript[,] gameTiles;
     public int XMap = 20;
     public int YMap = 10;
-   
+
+    public GameTileScript TargetTile { get; internal set; }
 
     private void Awake()
     {
-       gameTiles = new GameTileScript[XMap, YMap];
+        gameTiles = new GameTileScript[XMap, YMap];
 
         for (int x = 0; x < XMap; x++)
         {
@@ -23,7 +25,11 @@ public class GameManagerScript : MonoBehaviour
                 var spawnPosition = new Vector3(x, y, 0);
                 var tile = Instantiate(GameTilePrefab, spawnPosition, Quaternion.identity);
                 gameTiles[x, y] = tile.GetComponent<GameTileScript>();
-                if( (x + y) % 2 == 0)
+                gameTiles[x, y].GM = this;
+                gameTiles[x, y].X = x;
+                gameTiles[x, y].Y = y;
+
+                if ((x + y) % 2 == 0)
                 {
                     gameTiles[x, y].TurnGrey();
                 }
@@ -31,9 +37,99 @@ public class GameManagerScript : MonoBehaviour
         }
         spawnTile = gameTiles[1, 4];
         spawnTile.SetEnemySpawn();
-        StartCoroutine(SpawnEnemyCoroutine());
+        //StartCoroutine(SpawnEnemyCoroutine());
     }
-    
+
+    private void Update()
+    {
+        if (Input.GetKeyDown((KeyCode.Space)) && TargetTile != null)
+        {
+            foreach(var t in gameTiles)
+            {
+                t.SetPath(false);
+            }
+
+            var path = PathFinding(spawnTile, TargetTile);
+            var tile = TargetTile; 
+
+            while(tile != null)
+            {
+                tile.SetPath(true);
+                tile = path[tile];
+            }
+        }
+    }
+
+    private Dictionary<GameTileScript, GameTileScript> PathFinding(GameTileScript sourceTile, GameTileScript targetTile)
+    {
+        var dist = new Dictionary<GameTileScript, int>();
+        var prev = new Dictionary<GameTileScript, GameTileScript>();
+        var Q = new List<GameTileScript>();
+
+        foreach (var v in gameTiles)
+        {
+            dist.Add(v, 9999);
+
+            prev.Add(v, null);
+
+            Q.Add(v);
+        }
+
+        dist[sourceTile] = 0;
+
+        while (Q.Count > 0)
+        {
+            GameTileScript u = null;
+            int minDistance = int.MaxValue;
+
+            foreach (var v in Q)
+            {
+                if ((dist[v] < minDistance))
+                {
+                    minDistance = dist[v];
+                    u = v;
+                }
+            }
+
+            Q.Remove(u);
+
+            foreach (var v in FindNeighbor(u))
+            {
+                if (!Q.Contains(v) || v.IsBlocked)
+                {
+                    continue;
+                }
+
+                int alt = dist[u] + 1;
+
+                if (alt < dist[v])
+                {
+                    dist[v] = alt;
+
+                    prev[v] = u;
+                }
+
+            }
+        }
+
+        return prev;
+    }
+
+    private List<GameTileScript> FindNeighbor(GameTileScript u)
+    {
+        var result = new List<GameTileScript>();
+        if (u.X - 1 >= 0)
+            result.Add(gameTiles[u.X - 1, u.Y]);
+        if (u.X + 1 < XMap)
+            result.Add(gameTiles[u.X + 1, u.Y]);
+        if (u.Y - 1 >= 0)
+            result.Add(gameTiles[u.X, u.Y - 1]);
+        if (u.Y + 1 < YMap)
+            result.Add(gameTiles[u.X, u.Y + 1]);
+        return result;
+
+    }
+
     IEnumerator SpawnEnemyCoroutine()
     {
         while (true)
@@ -47,7 +143,7 @@ public class GameManagerScript : MonoBehaviour
                 }
                 yield return new WaitForSeconds((2f));
             }
-      
+
         }
     }
 
