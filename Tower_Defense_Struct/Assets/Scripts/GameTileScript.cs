@@ -20,6 +20,10 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+    }
+
+    private void Start()
+    {
         originalColor = spriteRenderer.color;
     }
 
