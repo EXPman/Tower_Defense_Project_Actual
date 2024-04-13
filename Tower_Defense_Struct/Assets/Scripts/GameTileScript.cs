@@ -3,10 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerClickHandler
+public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     private SpriteRenderer spriteRenderer;
     [SerializeField] SpriteRenderer HoverRenderer;
+    [SerializeField] SpriteRenderer TurretRenderer;
     [SerializeField] SpriteRenderer SpawnerRenderer;
 
     private void Awake()
@@ -35,11 +36,12 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     internal void SetEnemySpawn()
     {
         SpawnerRenderer.enabled = true;
-
     }
-    public void OnPointerClick(PointerEventData eventData)
+
+
+    public void OnPointerDown(PointerEventData eventData)
     {
-        Debug.Log("Click");
-
+        TurretRenderer.enabled = !TurretRenderer.enabled;
     }
+
 }
