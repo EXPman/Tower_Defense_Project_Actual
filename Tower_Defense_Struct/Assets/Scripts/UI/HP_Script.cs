@@ -46,7 +46,7 @@ public class HP_Script : MonoBehaviour
 
     private void EndGame()
     {
-        StopAllCoroutines();
+        StopAllCoroutines(); //Les enemmies ne spawn plus 
         Debug.Log("Game Over");
 
     }

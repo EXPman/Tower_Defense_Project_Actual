@@ -13,8 +13,9 @@ public class GameManagerScript : MonoBehaviour
     public int YMap = 10;
 
     public GameTileScript TargetTile { get; internal set; }
-
     List<GameTileScript> pathToGoal = new List<GameTileScript>();
+
+    public static bool IsGamePaused;
 
     private void Awake()
     {
@@ -43,7 +44,8 @@ public class GameManagerScript : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetKeyDown((KeyCode.Space)) && TargetTile != null)
+
+        if (Input.GetKeyDown(KeyCode.Space) && TargetTile != null)
         {
             foreach (var t in gameTiles)
             {
