@@ -1,10 +1,23 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
     private Stack<GameTileScript> path = new Stack<GameTileScript>();
+    public static event Action OnEnemyReachedEnd;
+
+    private void OnEnable()
+    {
+        HP_Script.OnGameOver += DestroySelf;
+    }
+
+    private void OnDisable()
+    {
+        HP_Script.OnGameOver -= DestroySelf;
+    }
 
     internal void SetPath(List<GameTileScript> pathToGoal)
     {
@@ -26,12 +39,19 @@ public class Enemy : MonoBehaviour
             if (Vector3.Distance(transform.position, destPos) < 0.01f)
             {
                 path.Pop();
+              
             }
                 
         }
         else
         {
+            OnEnemyReachedEnd?.Invoke();
             Destroy(gameObject);
         }
+    }
+
+    private void DestroySelf()
+    {
+      Destroy(gameObject);
     }
 }

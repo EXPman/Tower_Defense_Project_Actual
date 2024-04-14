@@ -13,6 +13,7 @@ public class GameManagerScript : MonoBehaviour
     public int YMap = 10;
 
     public GameTileScript TargetTile { get; internal set; }
+
     List<GameTileScript> pathToGoal = new List<GameTileScript>();
 
     private void Awake()
@@ -36,7 +37,7 @@ public class GameManagerScript : MonoBehaviour
                 }
             }
         }
-        spawnTile = gameTiles[1, 7];
+        spawnTile = gameTiles[0, 4];
         spawnTile.SetEnemySpawn();
     }
 
@@ -44,15 +45,16 @@ public class GameManagerScript : MonoBehaviour
     {
         if (Input.GetKeyDown((KeyCode.Space)) && TargetTile != null)
         {
-            foreach(var t in gameTiles)
+            foreach (var t in gameTiles)
             {
                 t.SetPath(false);
             }
 
             var path = PathFinding(spawnTile, TargetTile);
-            var tile = TargetTile; 
+            var tile = TargetTile;
 
-            while(tile != null)
+            pathToGoal.Clear();
+            while (tile != null)
             {
                 pathToGoal.Add(tile);
                 tile.SetPath(true);
@@ -60,6 +62,7 @@ public class GameManagerScript : MonoBehaviour
             }
             StartCoroutine(SpawnEnemyCoroutine());
         }
+
     }
 
     private Dictionary<GameTileScript, GameTileScript> PathFinding(GameTileScript sourceTile, GameTileScript targetTile)
@@ -134,14 +137,19 @@ public class GameManagerScript : MonoBehaviour
 
     IEnumerator SpawnEnemyCoroutine()
     {
-        while (true)
+        while (!HP_Script.IsGameOver)
         {
-            for (int q = 0; q < 5; q++)
+            for (int q = 0; q < 5; q++) 
             {
+                if (HP_Script.IsGameOver)  // Vérifie à nouveau ici avant de commencer à créer les ennemis
+                    yield break;
                 for (int i = 0; i < 5; i++)
                 {
+                    if (HP_Script.IsGameOver) //vérifie avant chaque ennemi
+                        yield break;
+
                     yield return new WaitForSeconds(0.5f);
-                    var enemy =Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity);
+                    var enemy = Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity);
                     enemy.GetComponent<Enemy>().SetPath(pathToGoal);
                 }
                 yield return new WaitForSeconds((2f));
