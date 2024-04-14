@@ -675,7 +675,7 @@ MonoBehaviour:
       m_Calls:
       - m_Target: {fileID: 2043199860}
         m_TargetAssemblyTypeName: PauseMenu, Assembly-CSharp
-        m_MethodName: Quitting
+        m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -1790,7 +1790,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: -873.1798, y: 247.49985}
+  m_AnchoredPosition: {x: -901.7, y: 253.8}
   m_SizeDelta: {x: 58.1698, y: 56.2532}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &1711555897
