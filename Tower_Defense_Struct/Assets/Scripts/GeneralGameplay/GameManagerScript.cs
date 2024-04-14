@@ -57,6 +57,7 @@ public class GameManagerScript : MonoBehaviour
                 tile.SetPath(true);
                 tile = path[tile];
             }
+            StartCoroutine(SpawnEnemyCoroutine());
         }
     }
 
@@ -138,8 +139,8 @@ public class GameManagerScript : MonoBehaviour
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity);
                     yield return new WaitForSeconds(0.5f);
+                    var enemy =Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity);
                 }
                 yield return new WaitForSeconds((2f));
             }
