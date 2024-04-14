@@ -12,10 +12,11 @@ public class Tracker : MonoBehaviour
     {
         if(destinationIndex < destination.Count)
         {
-            transform.position = Vector3.Lerp(transform.position
-                , destination[destinationIndex].position, 2 * Time.deltaTime);
+            Vector3 destPos = destination[destinationIndex].position;
+             transform.position= Vector3.MoveTowards(transform.position
+                , destPos, 2 * Time.deltaTime);
 
-            if(Vector3.Distance(transform.position, destination[destinationIndex].position) < 0.01f)
+            if(Vector3.Distance(transform.position, destPos) < 0.01f)
             {
                 destinationIndex++;
             }
