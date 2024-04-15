@@ -20,6 +20,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private void Awake()
     {
         spriteRenderer = GetComponent<SpriteRenderer>();
+        TurretRenderer.enabled = false; 
     }
 
     private void Start()
@@ -55,6 +56,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public void OnPointerDown(PointerEventData eventData)
     {
         TurretRenderer.enabled = !TurretRenderer.enabled;
+        IsBlocked = TurretRenderer.enabled;
     }
     
     internal void SetPath(bool isPath)
