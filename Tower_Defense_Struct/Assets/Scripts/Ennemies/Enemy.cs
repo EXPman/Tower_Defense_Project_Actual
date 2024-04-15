@@ -9,6 +9,13 @@ public class Enemy : MonoBehaviour
     private Stack<GameTileScript> path = new Stack<GameTileScript>();
     public static event Action OnEnemyReachedEnd;
 
+    public static HashSet<Enemy> allEnnemies = new HashSet<Enemy>();
+
+    private void Awake()
+    {
+        allEnnemies.Add(this);
+    }
+
     private void OnEnable()
     {
         HP_Script.OnGameOver += DestroySelf;
@@ -46,12 +53,15 @@ public class Enemy : MonoBehaviour
         else
         {
             OnEnemyReachedEnd?.Invoke();
-            Destroy(gameObject);
+            DestroySelf();
+            //allEnnemies.Remove(this);
+            //Destroy(gameObject);
         }
     }
 
     private void DestroySelf()
     {
-      Destroy(gameObject);
+        allEnnemies.Remove(this);
+        Destroy(gameObject);
     }
 }

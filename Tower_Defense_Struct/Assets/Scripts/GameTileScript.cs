@@ -11,6 +11,9 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [SerializeField] SpriteRenderer HoverRenderer;
     [SerializeField] SpriteRenderer TurretRenderer;
     [SerializeField] SpriteRenderer SpawnerRenderer;
+    private LineRenderer lineRenderer;
+
+    //Enemy target = null;
 
     public GameManagerScript GM { get; internal set; }
     public int X { get; internal set; }
@@ -19,8 +22,37 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private void Awake()
     {
+        lineRenderer = GetComponent<LineRenderer>();
+        lineRenderer.enabled = false;
+        lineRenderer.SetPosition(0,transform.position);
         spriteRenderer = GetComponent<SpriteRenderer>();
         TurretRenderer.enabled = false; 
+    }
+
+    private void Update()
+    {
+        if(TurretRenderer.enabled)
+        {
+            Enemy target = null;
+            foreach (var ennemy in Enemy.allEnnemies)
+            {
+                if(Vector3.Distance(transform.position,ennemy.transform.position)<2)
+                {
+                    target = ennemy;
+                    break;
+                }
+            }
+
+            if(target != null)
+            {
+                lineRenderer.SetPosition(1, target.transform.position);
+                lineRenderer.enabled = true;
+            }
+            else
+            {
+                lineRenderer.enabled = false;
+            }
+        }
     }
 
     private void Start()
