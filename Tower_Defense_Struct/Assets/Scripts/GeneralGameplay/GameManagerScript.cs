@@ -14,6 +14,8 @@ public class GameManagerScript : MonoBehaviour
 
     public GameTileScript TargetTile { get; internal set; }
 
+    List<GameTileScript> PathToGoal = new List<GameTileScript>();
+
     private void Awake()
     {
         gameTiles = new GameTileScript[XMap, YMap];
@@ -37,7 +39,7 @@ public class GameManagerScript : MonoBehaviour
         }
         spawnTile = gameTiles[1, 4];
         spawnTile.SetEnemySpawn();
-        //StartCoroutine(SpawnEnemyCoroutine());
+        
     }
 
     private void Update()
@@ -54,9 +56,11 @@ public class GameManagerScript : MonoBehaviour
 
             while(tile != null)
             {
+                PathToGoal.Add(tile);
                 tile.SetPath(true);
                 tile = path[tile];
             }
+            //StartCoroutine(SpawnEnemyCoroutine());
         }
     }
 
@@ -138,8 +142,9 @@ public class GameManagerScript : MonoBehaviour
             {
                 for (int i = 0; i < 5; i++)
                 {
-                    Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity);
                     yield return new WaitForSeconds(0.5f);
+                    var ennemy = Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity);
+                    ennemy.GetComponent<Enemy>().SetPath(PathToGoal);
                 }
                 yield return new WaitForSeconds((2f));
             }
