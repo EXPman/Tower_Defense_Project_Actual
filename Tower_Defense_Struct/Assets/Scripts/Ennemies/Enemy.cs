@@ -6,10 +6,13 @@ using UnityEngine;
 
 public class Enemy : MonoBehaviour
 {
+    [SerializeField] GameObject visual;
+    public GameManagerScript GM;
     private Stack<GameTileScript> path = new Stack<GameTileScript>();
     public static event Action OnEnemyReachedEnd;
-
     public static HashSet<Enemy> allEnnemies = new HashSet<Enemy>();
+
+    int hp = 10; 
 
     private void Awake()
     {
@@ -46,9 +49,9 @@ public class Enemy : MonoBehaviour
             if (Vector3.Distance(transform.position, destPos) < 0.01f)
             {
                 path.Pop();
-              
+
             }
-                
+
         }
         else
         {
@@ -63,5 +66,18 @@ public class Enemy : MonoBehaviour
     {
         allEnnemies.Remove(this);
         Destroy(gameObject);
+    }
+
+    internal void Attack()
+    {
+        if(--hp <= 0)
+        {
+            GM.gold++;
+            DestroySelf(); 
+        }
+        else
+        {
+            visual.transform.localScale *= 0.9f; 
+        }
     }
 }
