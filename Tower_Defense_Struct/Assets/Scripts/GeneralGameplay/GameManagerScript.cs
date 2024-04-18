@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
 
@@ -7,12 +8,16 @@ public class GameManagerScript : MonoBehaviour
 {
     [SerializeField] GameObject GameTilePrefab;
     [SerializeField] GameObject EnemyPrefab;
+    [SerializeField] TMP_Text GoldText; 
     private GameTileScript spawnTile;
     GameTileScript[,] gameTiles;
     public int XMap = 20;
     public int YMap = 10;
     bool PathAcctive = false;
     
+
+
+    [SerializeField] public int gold = 100;
 
     public GameTileScript TargetTile { get; internal set; }
     List<GameTileScript> pathToGoal = new List<GameTileScript>();
@@ -49,6 +54,8 @@ public class GameManagerScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && TargetTile != null)
         {
             if(!PathAcctive)
+
+            foreach (var t in gameTiles)
             {
                 foreach (var t in gameTiles)
                 {
@@ -70,6 +77,9 @@ public class GameManagerScript : MonoBehaviour
                 PathAcctive = true;
             }
         }
+
+        GoldText.text = $"Gold: {gold}";
+
     }
 
     private Dictionary<GameTileScript, GameTileScript> PathFinding(GameTileScript sourceTile, GameTileScript targetTile)
@@ -156,8 +166,9 @@ public class GameManagerScript : MonoBehaviour
                         yield break;
 
                     yield return new WaitForSeconds(0.5f);
-                    var enemy = Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity);
-                    enemy.GetComponent<Enemy>().SetPath(pathToGoal);
+                    var enemy = Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity).GetComponent<Enemy>();
+                    enemy.GM = this;
+                    enemy.SetPath(pathToGoal);
                 }
                 yield return new WaitForSeconds((2f));
             }
