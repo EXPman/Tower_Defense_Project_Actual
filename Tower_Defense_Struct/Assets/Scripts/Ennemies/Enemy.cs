@@ -46,7 +46,6 @@ public class Enemy : MonoBehaviour
             if (Vector3.Distance(transform.position, destPos) < 0.01f)
             {
                 path.Pop();
-              
             }
                 
         }
@@ -59,7 +58,7 @@ public class Enemy : MonoBehaviour
         }
     }
 
-    private void DestroySelf()
+    public void DestroySelf()
     {
         allEnnemies.Remove(this);
         Destroy(gameObject);

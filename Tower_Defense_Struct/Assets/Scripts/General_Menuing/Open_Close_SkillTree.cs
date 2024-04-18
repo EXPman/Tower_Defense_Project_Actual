@@ -5,6 +5,7 @@ using UnityEngine.SceneManagement;
 
 public class NewBehaviourScript : MonoBehaviour
 {
+
     void Update()
     {
         if(Input.GetKeyDown(KeyCode.Tab))
@@ -12,5 +13,10 @@ public class NewBehaviourScript : MonoBehaviour
             SceneManager.LoadScene("InLevelScene");
             //SceneManager.SetActiveScene(SceneManager.GetSceneByName("InLevelScene"));
         }
+    }
+
+    public void OnClick()
+    {
+        SceneManager.SetActiveScene(SceneManager.GetSceneByName("SkillTreeScene"));
     }
 }

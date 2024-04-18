@@ -11,6 +11,8 @@ public class GameManagerScript : MonoBehaviour
     GameTileScript[,] gameTiles;
     public int XMap = 20;
     public int YMap = 10;
+    bool PathAcctive = false;
+    
 
     public GameTileScript TargetTile { get; internal set; }
     List<GameTileScript> pathToGoal = new List<GameTileScript>();
@@ -44,27 +46,30 @@ public class GameManagerScript : MonoBehaviour
 
     private void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.Space) && TargetTile != null)
         {
-            foreach (var t in gameTiles)
+            if(!PathAcctive)
             {
-                t.SetPath(false);
-            }
+                foreach (var t in gameTiles)
+                {
+                    t.SetPath(false);
+                }
 
-            var path = PathFinding(spawnTile, TargetTile);
-            var tile = TargetTile;
+                var path = PathFinding(spawnTile, TargetTile);
+                var tile = TargetTile;
 
-            pathToGoal.Clear();
-            while (tile != null)
-            {
-                pathToGoal.Add(tile);
-                tile.SetPath(true);
-                tile = path[tile];
+                pathToGoal.Clear();
+                while (tile != null)
+                {
+                    pathToGoal.Add(tile);
+                    tile.SetPath(true);
+                    tile = path[tile];
+                }
+                StartCoroutine(SpawnEnemyCoroutine());
+
+                PathAcctive = true;
             }
-            StartCoroutine(SpawnEnemyCoroutine());
         }
-
     }
 
     private Dictionary<GameTileScript, GameTileScript> PathFinding(GameTileScript sourceTile, GameTileScript targetTile)
@@ -156,7 +161,6 @@ public class GameManagerScript : MonoBehaviour
                 }
                 yield return new WaitForSeconds((2f));
             }
-
         }
     }
 

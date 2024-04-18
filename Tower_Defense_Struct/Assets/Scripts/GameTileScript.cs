@@ -13,6 +13,8 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [SerializeField] SpriteRenderer SpawnerRenderer;
     private LineRenderer lineRenderer;
 
+    private const short TurretRange = 4;
+
     //Enemy target = null;
 
     public GameManagerScript GM { get; internal set; }
@@ -36,7 +38,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             Enemy target = null;
             foreach (var ennemy in Enemy.allEnnemies)
             {
-                if(Vector3.Distance(transform.position,ennemy.transform.position)<2)
+                if(Vector3.Distance(transform.position,ennemy.transform.position)<TurretRange)
                 {
                     target = ennemy;
                     break;
