@@ -13,6 +13,8 @@ public class GameManagerScript : MonoBehaviour
     GameTileScript[,] gameTiles;
     public int XMap = 20;
     public int YMap = 10;
+    bool PathAcctive = false;
+    
 
 
     [SerializeField] public int gold = 100;
@@ -49,26 +51,31 @@ public class GameManagerScript : MonoBehaviour
 
     private void Update()
     {
-
         if (Input.GetKeyDown(KeyCode.Space) && TargetTile != null)
         {
+            if(!PathAcctive)
 
             foreach (var t in gameTiles)
             {
-                t.SetPath(false);
-            }
+                foreach (var T in gameTiles)
+                {
+                    T.SetPath(false);
+                }
 
-            var path = PathFinding(spawnTile, TargetTile);
-            var tile = TargetTile;
+                var path = PathFinding(spawnTile, TargetTile);
+                var tile = TargetTile;
 
-            pathToGoal.Clear();
-            while (tile != null)
-            {
-                pathToGoal.Add(tile);
-                tile.SetPath(true);
-                tile = path[tile];
+                pathToGoal.Clear();
+                while (tile != null)
+                {
+                    pathToGoal.Add(tile);
+                    tile.SetPath(true);
+                    tile = path[tile];
+                }
+                StartCoroutine(SpawnEnemyCoroutine());
+
+                PathAcctive = true;
             }
-            StartCoroutine(SpawnEnemyCoroutine());
         }
 
         GoldText.text = $"Gold: {gold}";
@@ -165,7 +172,6 @@ public class GameManagerScript : MonoBehaviour
                 }
                 yield return new WaitForSeconds((2f));
             }
-
         }
     }
 
