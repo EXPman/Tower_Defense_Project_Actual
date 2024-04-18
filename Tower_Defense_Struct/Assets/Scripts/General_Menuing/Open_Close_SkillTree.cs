@@ -15,8 +15,8 @@ public class NewBehaviourScript : MonoBehaviour
         }
     }
 
-    public void OnClick()
+    public void LoadSkillTreeScene(string sceneName)
     {
-        SceneManager.SetActiveScene(SceneManager.GetSceneByName("SkillTreeScene"));
+        SceneManager.LoadScene(sceneName);
     }
 }
