@@ -57,9 +57,9 @@ public class GameManagerScript : MonoBehaviour
 
             foreach (var t in gameTiles)
             {
-                foreach (var t in gameTiles)
+                foreach (var T in gameTiles)
                 {
-                    t.SetPath(false);
+                    T.SetPath(false);
                 }
 
                 var path = PathFinding(spawnTile, TargetTile);
