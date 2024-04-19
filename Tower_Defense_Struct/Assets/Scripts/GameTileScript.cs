@@ -16,7 +16,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private LineRenderer lineRenderer;
     private bool canAttack = true;
 
-    private const short TurretRange = 4;
+    public static int TurretRange = 4;
 
     //Enemy target = null;
 

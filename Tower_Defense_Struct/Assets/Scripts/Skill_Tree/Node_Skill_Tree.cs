@@ -10,7 +10,7 @@ public class Node_Skill_Tree : MonoBehaviour
     [SerializeField] public List<Node_Skill_Tree> ChildNodes = new List<Node_Skill_Tree>();
     [SerializeField] SpriteRenderer Sprite;
     [SerializeField] TMP_Text Bufftext;
-    [SerializeField] int HPBuff = 1;
+    [SerializeField] int BuffValue = 1;
 
     public enum NodeState
     {
@@ -23,7 +23,16 @@ public class Node_Skill_Tree : MonoBehaviour
 
     private void Awake()
     {
-        Bufftext.text = $"+{HPBuff}";
+        switch(this.tag)
+        {
+            case "HPNode":
+                Bufftext.text = $"+{BuffValue} HP";
+                break;
+            case "RangeNode":
+                Bufftext.text = $"+{BuffValue} Range";
+                break;
+        }
+        
         if (ParentNode != null)
         {
             ParentNode.ChildNodes.Add(this);
@@ -63,7 +72,15 @@ public class Node_Skill_Tree : MonoBehaviour
                 Sprite.color = Color.yellow;
                 break;
             case NodeState.Claimed:
-                HP_Script.BonusHP += HPBuff;
+                switch (this.tag)
+                {
+                    case "HPNode":
+                        HP_Script.BonusHP += BuffValue;
+                        break;
+                    case "RangeNode":
+                        GameTileScript.TurretRange += BuffValue;
+                        break;
+                }
                 Sprite.color = Color.green;
                 break;
             case NodeState.Locked:
