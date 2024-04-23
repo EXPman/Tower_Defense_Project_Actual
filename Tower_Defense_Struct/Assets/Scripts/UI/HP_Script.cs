@@ -26,12 +26,16 @@ public class HP_Script : MonoBehaviour
 
     private void HandleEnemyReachedEnd()
     {
+        Debug.Log($"Enemy reached end. Current HP: {HPvalue}");
+
         if (IsGameOver) return;
-
-        HPvalue--;
-        HPtext.text = $"HP: {HPvalue + BonusHP}";
-
-        if(HPvalue <= 0)
+        if(HPvalue > 0)
+        {
+            HPvalue--;
+            HPtext.text = $"HP: {HPvalue + BonusHP}";
+        }
+    
+        if(HPvalue <= 0 && !IsGameOver)
         {
             HPvalue = 0;
             if (!IsGameOver)

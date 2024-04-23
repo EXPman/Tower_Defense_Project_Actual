@@ -10,6 +10,7 @@ public class Enemy : MonoBehaviour
     private Stack<GameTileScript> path = new Stack<GameTileScript>();
     public static event Action OnEnemyReachedEnd;
     public static HashSet<Enemy> allEnnemies = new HashSet<Enemy>();
+    private bool reachedEnd = false;
 
     int hp = 10;
 
@@ -52,24 +53,32 @@ public class Enemy : MonoBehaviour
             }
 
         }
-        else
+        else if (!reachedEnd)
         {
+            reachedEnd = true;
             OnEnemyReachedEnd?.Invoke();
             DestroySelf();
-            //allEnnemies.Remove(this);
-            //Destroy(gameObject);
         }
     }
 
     public void DestroySelf()
     {
-        allEnnemies.Remove(this);
-        Destroy(gameObject);
+        if (allEnnemies.Contains(this))
+        {
+            Debug.Log("Destruction de l'ennemi.");
+            allEnnemies.Remove(this);
+            Destroy(gameObject);
+        }
+        else
+        {
+            Debug.Log("L'ennemi a d�j� �t� retir� de la liste.");
+        }
     }
 
     internal void Attack()
     {
-        if(--hp <= 0)
+        Debug.Log("Attaque en cours, HP avant attaque: " + hp);
+        if (--hp <= 0)
         {
             GameManagerScript.gold++;
             DestroySelf(); 

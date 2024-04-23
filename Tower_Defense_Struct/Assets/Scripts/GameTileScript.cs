@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
+using UnityEngine.UIElements;
 
 public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
@@ -29,19 +30,19 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         lineRenderer = GetComponent<LineRenderer>();
         lineRenderer.enabled = false;
-        lineRenderer.SetPosition(0,transform.position);
+        lineRenderer.SetPosition(0, transform.position);
         spriteRenderer = GetComponent<SpriteRenderer>();
-        TurretRenderer.enabled = false; 
+        TurretRenderer.enabled = false;
     }
 
     private void Update()
     {
-        if(TurretRenderer.enabled && canAttack)
+        if (TurretRenderer.enabled && canAttack)
         {
             Enemy target = null;
             foreach (var ennemy in Enemy.allEnnemies)
             {
-                if(Vector3.Distance(transform.position,ennemy.transform.position)<TurretRange)
+                if (Vector3.Distance(transform.position, ennemy.transform.position) < TurretRange)
                 {
                     target = ennemy;
                     break;
@@ -55,7 +56,6 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         }
     }
 
-
     private void Start()
     {
         originalColor = spriteRenderer.color;
@@ -66,11 +66,11 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         target.Attack();
         //target.GetComponent<Enemy>().Attack();
         canAttack = false;
-        lineRenderer.SetPosition(1, target.transform.position); 
+        lineRenderer.SetPosition(1, target.transform.position);
         lineRenderer.enabled = true;
         yield return new WaitForSeconds(0.2f);
         lineRenderer.enabled = false;
-        yield return new WaitForSeconds(0.3f); 
+        yield return new WaitForSeconds(0.3f);
         canAttack = true;
     }
 
@@ -97,17 +97,29 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     }
 
 
+
     public void OnPointerDown(PointerEventData eventData)
     {
-        IsBlocked = TurretRenderer.enabled;
 
         if(GameManagerScript.gold >= 25)
         {
             GameManagerScript.gold -= TurretCost;
-            TurretRenderer.enabled = true;
-        }
-           
 
+        if (!IsBlocked && GM.gold >= TurretCost)
+        {
+            //GM.gold -= TurretCost;
+            TurretRenderer.enabled = true;
+            IsBlocked = true;
+            GM.CalculateNewPath();
+        }
+        else if (IsBlocked)
+        {
+            Debug.Log("Une tourelle est d�j� pr�sente sur cette tuile.");
+        }
+        else
+        {
+            Debug.Log("Pas assez d'or.");
+        }
     }
 
     internal void SetPath(bool isPath)
