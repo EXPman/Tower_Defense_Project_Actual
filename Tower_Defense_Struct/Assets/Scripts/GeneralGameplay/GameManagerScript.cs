@@ -17,7 +17,7 @@ public class GameManagerScript : MonoBehaviour
     
 
 
-    [SerializeField] public int gold = 100;
+    [SerializeField] public static int gold = 100;
 
     public GameTileScript TargetTile { get; internal set; }
     List<GameTileScript> pathToGoal = new List<GameTileScript>();
@@ -54,27 +54,26 @@ public class GameManagerScript : MonoBehaviour
         if (Input.GetKeyDown(KeyCode.Space) && TargetTile != null)
         {
             if(!PathAcctive)
-
-            foreach (var t in gameTiles)
             {
-                foreach (var T in gameTiles)
-                {
-                    T.SetPath(false);
-                }
+                    foreach (var T in gameTiles)
+                    {
+                        T.SetPath(false);
+                    }
 
-                var path = PathFinding(spawnTile, TargetTile);
-                var tile = TargetTile;
+                    var path = PathFinding(spawnTile, TargetTile);
+                    var tile = TargetTile;
 
-                pathToGoal.Clear();
-                while (tile != null)
-                {
-                    pathToGoal.Add(tile);
-                    tile.SetPath(true);
-                    tile = path[tile];
-                }
-                StartCoroutine(SpawnEnemyCoroutine());
+                    pathToGoal.Clear();
+                    while (tile != null)
+                    {
+                        pathToGoal.Add(tile);
+                        tile.SetPath(true);
+                        tile = path[tile];
+                    }
+                    StartCoroutine(SpawnEnemyCoroutine());
 
-                PathAcctive = true;
+                    PathAcctive = true;
+                
             }
         }
 
@@ -167,7 +166,6 @@ public class GameManagerScript : MonoBehaviour
 
                     yield return new WaitForSeconds(0.5f);
                     var enemy = Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity).GetComponent<Enemy>();
-                    enemy.GM = this;
                     enemy.SetPath(pathToGoal);
                 }
                 yield return new WaitForSeconds((2f));

@@ -63,7 +63,8 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     IEnumerator AttackCoroutine(Enemy target)
     {
-        target.GetComponent<Enemy>().Attack();
+        target.Attack();
+        //target.GetComponent<Enemy>().Attack();
         canAttack = false;
         lineRenderer.SetPosition(1, target.transform.position); 
         lineRenderer.enabled = true;
@@ -82,13 +83,11 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         HoverRenderer.enabled = true;
         GM.TargetTile = this;
-        Debug.Log("enter");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         HoverRenderer.enabled = false;
-        Debug.Log("exit");
     }
 
 
@@ -102,9 +101,9 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         IsBlocked = TurretRenderer.enabled;
 
-        if(GM.gold >= 25)
+        if(GameManagerScript.gold >= 25)
         {
-            GM.gold -= TurretCost;
+            GameManagerScript.gold -= TurretCost;
             TurretRenderer.enabled = true;
         }
            

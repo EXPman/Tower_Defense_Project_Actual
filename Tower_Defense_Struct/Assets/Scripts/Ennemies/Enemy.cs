@@ -7,27 +7,27 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] GameObject visual;
-    public GameManagerScript GM;
     private Stack<GameTileScript> path = new Stack<GameTileScript>();
     public static event Action OnEnemyReachedEnd;
     public static HashSet<Enemy> allEnnemies = new HashSet<Enemy>();
 
-    int hp = 10; 
+    int hp = 10;
 
     private void Awake()
     {
         allEnnemies.Add(this);
+        Debug.Log("ennemy created");
     }
 
-    private void OnEnable()
-    {
-        HP_Script.OnGameOver += DestroySelf;
-    }
+    //private void OnEnable()
+    //{
+    //    HP_Script.OnGameOver += DestroySelf;
+    //}
 
-    private void OnDisable()
-    {
-        HP_Script.OnGameOver -= DestroySelf;
-    }
+    //private void OnDisable()
+    //{
+    //    HP_Script.OnGameOver -= DestroySelf;
+    //}
 
     internal void SetPath(List<GameTileScript> pathToGoal)
     {
@@ -49,7 +49,6 @@ public class Enemy : MonoBehaviour
             if (Vector3.Distance(transform.position, destPos) < 0.01f)
             {
                 path.Pop();
-
             }
 
         }
@@ -72,12 +71,13 @@ public class Enemy : MonoBehaviour
     {
         if(--hp <= 0)
         {
-            GM.gold++;
+            GameManagerScript.gold++;
             DestroySelf(); 
         }
         else
         {
-            visual.transform.localScale *= 0.9f; 
+            visual.transform.localScale = new Vector3((float)(visual.transform.localScale.x * 0.9), (float)(visual.transform.localScale.x * 0.9), (float)(visual.transform.localScale.x * 0.9));
+            Debug.Log("ennemy hit");
         }
     }
 }
