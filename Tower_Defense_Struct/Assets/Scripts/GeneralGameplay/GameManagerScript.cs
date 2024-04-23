@@ -160,6 +160,11 @@ public class GameManagerScript : MonoBehaviour
         return prev;
     }
 
+    private void CanBuyTurret()
+    {
+        
+    }
+
     private List<GameTileScript> FindNeighbor(GameTileScript u)
     {
         var result = new List<GameTileScript>();

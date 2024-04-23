@@ -5,11 +5,11 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
-public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
+public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerClickHandler
 {
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
-    private const int TurretCost = 25;
+    public static int TurretCost = 25;
 
     [SerializeField] SpriteRenderer HoverRenderer;
     [SerializeField] SpriteRenderer TurretRenderer;
@@ -78,6 +78,25 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         spriteRenderer.color = Color.gray;
     }
 
+    public void OnPointerClick(PointerEventData eventData)
+    {
+        TowerManager towerManager = new TowerManager();
+
+        if (towerManager.CanPlaceTowerHere() && !IsBlocked)
+        {
+            PlaceTower(towerManager.GetSelectedTower());
+        }
+    }
+
+    private void PlaceTower(GameObject towerPrefab)
+    {
+        if (towerPrefab != null)
+        {
+            Instantiate(towerPrefab, transform.position, Quaternion.identity);
+            IsBlocked = true;
+        }
+    }
+
     public void OnPointerEnter(PointerEventData eventData)
     {
         HoverRenderer.enabled = true;
@@ -91,21 +110,19 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         Debug.Log("exit");
     }
 
-
     internal void SetEnemySpawn()
     {
         SpawnerRenderer.enabled = true;
     }
 
-
-
     public void OnPointerDown(PointerEventData eventData)
     {
+        TowerManager towerManager;
 
 
         if (!IsBlocked && GM.gold >= TurretCost)
         {
-            //GM.gold -= TurretCost;
+            GM.gold -= TurretCost;
             TurretRenderer.enabled = true;
             IsBlocked = true;
             GM.CalculateNewPath();
