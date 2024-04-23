@@ -7,8 +7,8 @@ using System;
 public class HP_Script : MonoBehaviour
 {
     [SerializeField] TMP_Text HPtext;
-    public static int HPvalue = 50;
-    public static int BonusHP;
+    public static float HPvalue = 50;
+    public static float BonusHP;
 
     public static bool IsGameOver = false;
     public static event Action OnGameOver; 

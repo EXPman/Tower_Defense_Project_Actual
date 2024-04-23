@@ -6,6 +6,7 @@ TagManager:
   tags:
   - HPNode
   - RangeNode
+  - ASPNode
   layers:
   - Default
   - TransparentFX

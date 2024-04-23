@@ -17,7 +17,8 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private LineRenderer lineRenderer;
     private bool canAttack = true;
 
-    public static int TurretRange = 4;
+    public static float TurretRange = 2;
+    public static float TurretAttackSpeed = 0.2f;
 
     //Enemy target = null;
 
@@ -63,7 +64,8 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     IEnumerator AttackCoroutine(Enemy target)
     {
-        target.GetComponent<Enemy>().Attack();
+        target.Attack();
+        //target.GetComponent<Enemy>().Attack();
         canAttack = false;
         lineRenderer.SetPosition(1, target.transform.position);
         lineRenderer.enabled = true;
@@ -101,13 +103,11 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     {
         HoverRenderer.enabled = true;
         GM.TargetTile = this;
-        Debug.Log("enter");
     }
 
     public void OnPointerExit(PointerEventData eventData)
     {
         HoverRenderer.enabled = false;
-        Debug.Log("exit");
     }
 
     internal void SetEnemySpawn()
@@ -117,12 +117,10 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        TowerManager towerManager;
 
-
-        if (!IsBlocked && GM.gold >= TurretCost)
+        if (!IsBlocked && GameManagerScript.gold >= TurretCost)
         {
-            GM.gold -= TurretCost;
+            GameManagerScript.gold -= TurretCost;
             TurretRenderer.enabled = true;
             IsBlocked = true;
             GM.CalculateNewPath();

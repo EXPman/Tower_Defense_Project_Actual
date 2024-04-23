@@ -18,7 +18,7 @@ public class GameManagerScript : MonoBehaviour
 
 
 
-    [SerializeField] public int gold = 100;
+    [SerializeField] public static int gold = 100;
 
     public GameTileScript TargetTile { get; internal set; }
     List<GameTileScript> pathToGoal = new List<GameTileScript>();
@@ -54,10 +54,8 @@ public class GameManagerScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && TargetTile != null)
         {
-            if (!PathAcctive)
-
-                foreach (var t in gameTiles)
-                {
+            if(!PathAcctive)
+            {
                     foreach (var T in gameTiles)
                     {
                         T.SetPath(false);
@@ -76,7 +74,8 @@ public class GameManagerScript : MonoBehaviour
                     StartCoroutine(SpawnEnemyCoroutine());
 
                     PathAcctive = true;
-                }
+                
+            }
         }
 
         GoldText.text = $"Gold: {gold}";
@@ -195,7 +194,6 @@ public class GameManagerScript : MonoBehaviour
 
                     yield return new WaitForSeconds(0.5f);
                     var enemy = Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity).GetComponent<Enemy>();
-                    enemy.GM = this;
                     enemy.SetPath(pathToGoal);
                 }
                 yield return new WaitForSeconds((2f));

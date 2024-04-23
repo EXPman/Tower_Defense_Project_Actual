@@ -7,7 +7,6 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] GameObject visual;
-    public GameManagerScript GM;
     private Stack<GameTileScript> path = new Stack<GameTileScript>();
     public static event Action OnEnemyReachedEnd;
     public static HashSet<Enemy> allEnnemies = new HashSet<Enemy>();
@@ -18,28 +17,17 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         allEnnemies.Add(this);
-        Debug.Log($"Nombre d'ennemis actuels dans allEnnemies: {allEnnemies.Count}");
-
-        if (allEnnemies.Contains(this))
-        {
-            Debug.LogWarning("Cet ennemi est déjà dans allEnnemies!");
-        }
-        else
-        {
-            allEnnemies.Add(this);
-        }
-        Debug.Log($"Nombre d'ennemis actuels dans allEnnemies: {allEnnemies.Count}");
     }
 
-    private void OnEnable()
-    {
-        HP_Script.OnGameOver += DestroySelf;
-    }
+    //private void OnEnable()
+    //{
+    //    HP_Script.OnGameOver += DestroySelf;
+    //}
 
-    private void OnDisable()
-    {
-        HP_Script.OnGameOver -= DestroySelf;
-    }
+    //private void OnDisable()
+    //{
+    //    HP_Script.OnGameOver -= DestroySelf;
+    //}
 
     internal void SetPath(List<GameTileScript> pathToGoal)
     {
@@ -91,13 +79,13 @@ public class Enemy : MonoBehaviour
         Debug.Log("Attaque en cours, HP avant attaque: " + hp);
         if (--hp <= 0)
         {
-            Debug.Log("Ennemi doit être détruit");
-            GM.gold++;
-            DestroySelf();
+            GameManagerScript.gold++;
+            DestroySelf(); 
         }
         else
         {
-            visual.transform.localScale *= 0.9f;
+            visual.transform.localScale = new Vector3((float)(visual.transform.localScale.x * 0.9), (float)(visual.transform.localScale.x * 0.9), (float)(visual.transform.localScale.x * 0.9));
+            Debug.Log("ennemy hit");
         }
     }
 }
