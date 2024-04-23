@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using TMPro;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class GameManagerScript : MonoBehaviour
 {
@@ -16,7 +17,12 @@ public class GameManagerScript : MonoBehaviour
     public int YMap = 10;
     bool PathAcctive = false;
 
-
+    [SerializeField] private Button turretAButton;
+    [SerializeField] private Button turretBButton;
+    [SerializeField] private TMP_Text Aprice;
+    [SerializeField] private TMP_Text Bprice;
+    int ACost = GameTileScript.TurretACost; 
+    int BCost = GameTileScript.TurretBCost;
 
     [SerializeField] public static int gold = 100;
 
@@ -54,54 +60,113 @@ public class GameManagerScript : MonoBehaviour
     {
         if (Input.GetKeyDown(KeyCode.Space) && TargetTile != null)
         {
-            if(!PathAcctive)
+            if (!PathAcctive)
             {
-                    foreach (var T in gameTiles)
-                    {
-                        T.SetPath(false);
-                    }
+                foreach (var T in gameTiles)
+                {
+                    T.SetPath(false);
+                }
 
-                    var path = PathFinding(spawnTile, TargetTile);
-                    var tile = TargetTile;
+                var path = PathFinding(spawnTile, TargetTile);
+                var tile = TargetTile;
 
-                    pathToGoal.Clear();
-                    while (tile != null)
-                    {
-                        pathToGoal.Add(tile);
-                        tile.SetPath(true);
-                        tile = path[tile];
-                    }
-                    StartCoroutine(SpawnEnemyCoroutine());
+                pathToGoal.Clear();
+                while (tile != null)
+                {
+                    pathToGoal.Add(tile);
+                    tile.SetPath(true);
+                    tile = path[tile];
+                }
+                StartCoroutine(SpawnEnemyCoroutine());
 
-                    PathAcctive = true;
-                
+                PathAcctive = true;
+
             }
+        }
+
+        // Mettre à jour l'état du bouton de la tour A
+        if (gold < ACost)
+        {
+            turretAButton.GetComponent<Image>().color = Color.gray; // Bouton devient gris
+            Aprice.color = Color.red;
+            turretAButton.interactable = false; // Rendre le bouton non interactif
+        }
+        else
+        {
+            turretAButton.GetComponent<Image>().color = Color.cyan; // Bouton devient bleu
+            Aprice.color = Color.white;
+            turretAButton.interactable = true; // Rendre le bouton interactif
+        }
+
+        // Mettre à jour l'état du bouton de la tour B
+        if (gold < BCost)
+        {
+            turretBButton.GetComponent<Image>().color = Color.gray; // Bouton devient gris
+            Bprice.color = Color.red;
+            turretBButton.interactable = false; // Rendre le bouton non interactif
+        }
+        else
+        {
+            turretBButton.GetComponent<Image>().color = Color.cyan; // Bouton devient bleu
+            Bprice.color = Color.white;
+            turretBButton.interactable = true; // Rendre le bouton interactif
         }
 
         GoldText.text = $"Gold: {gold}";
 
     }
 
+    public void UpdateGold(int amount)
+    {
+        gold += amount;
+        turretAButton.interactable = gold >= ACost;
+        turretBButton.interactable = gold >= BCost;
+        GoldText.text = $"Gold: {gold}";
+    }
+
     public void CalculateNewPath() //C<est pour solve un bug 
     {
         if (TargetTile != null)
         {
+            bool needsRecalculation = false;
+
             foreach (var t in gameTiles)
             {
-                t.SetPath(false);
+                if (t.IsBlocked && pathToGoal.Contains(t))
+                {
+                    needsRecalculation = true;
+                    break;
+                }
             }
 
-            var path = PathFinding(spawnTile, TargetTile);
-            var tile = TargetTile;
-
-            pathToGoal.Clear();
-            while (tile != null)
+            if (needsRecalculation)
             {
-                pathToGoal.Add(tile);
-                tile.SetPath(true);
-                tile = path[tile];
+                var path = PathFinding(spawnTile, TargetTile);
+                var tile = TargetTile;
+
+                pathToGoal.Clear();
+                while (tile != null)
+                {
+                    if (!tile.IsBlocked) // Assurez-vous que la tuile n'est pas bloquée
+                    {
+                        pathToGoal.Add(tile);
+                        tile.SetPath(true);
+                    }
+                    else
+                    {
+                        tile.SetPath(false);
+                    }
+                    tile = path[tile];
+                }
+
+                // Informez tous les ennemis qu'un nouveau chemin est disponible
+                foreach (var enemy in FindObjectsOfType<Enemy>())
+                {
+                    enemy.SetPath(pathToGoal);
+                }
             }
         }
+
     }
 
     private Dictionary<GameTileScript, GameTileScript> PathFinding(GameTileScript sourceTile, GameTileScript targetTile)
@@ -158,12 +223,6 @@ public class GameManagerScript : MonoBehaviour
 
         return prev;
     }
-
-    private void CanBuyTurret()
-    {
-        
-    }
-
     private List<GameTileScript> FindNeighbor(GameTileScript u)
     {
         var result = new List<GameTileScript>();

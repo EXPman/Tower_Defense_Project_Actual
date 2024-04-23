@@ -12,7 +12,7 @@ public class Enemy : MonoBehaviour
     public static HashSet<Enemy> allEnnemies = new HashSet<Enemy>();
     private bool reachedEnd = false;
 
-    int hp = 10;
+    int hp = 3;
 
     private void Awake()
     {
