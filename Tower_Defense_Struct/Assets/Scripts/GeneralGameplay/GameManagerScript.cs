@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using TMPro;
@@ -8,7 +9,7 @@ public class GameManagerScript : MonoBehaviour
 {
     [SerializeField] GameObject GameTilePrefab;
     [SerializeField] GameObject EnemyPrefab;
-    [SerializeField] TMP_Text GoldText; 
+    [SerializeField] TMP_Text GoldText;
     private GameTileScript spawnTile;
     GameTileScript[,] gameTiles;
     public int XMap = 20;
@@ -79,6 +80,28 @@ public class GameManagerScript : MonoBehaviour
 
         GoldText.text = $"Gold: {gold}";
 
+    }
+
+    public void CalculateNewPath() //C<est pour solve un bug 
+    {
+        if (TargetTile != null)
+        {
+            foreach (var t in gameTiles)
+            {
+                t.SetPath(false);
+            }
+
+            var path = PathFinding(spawnTile, TargetTile);
+            var tile = TargetTile;
+
+            pathToGoal.Clear();
+            while (tile != null)
+            {
+                pathToGoal.Add(tile);
+                tile.SetPath(true);
+                tile = path[tile];
+            }
+        }
     }
 
     private Dictionary<GameTileScript, GameTileScript> PathFinding(GameTileScript sourceTile, GameTileScript targetTile)
