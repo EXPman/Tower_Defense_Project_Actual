@@ -10,7 +10,7 @@ public class Node_Skill_Tree : MonoBehaviour
     [SerializeField] public List<Node_Skill_Tree> ChildNodes = new List<Node_Skill_Tree>();
     [SerializeField] SpriteRenderer Sprite;
     [SerializeField] TMP_Text Bufftext;
-    [SerializeField] int BuffValue = 1;
+    [SerializeField] float BuffValue = 1f;
 
     public enum NodeState
     {
@@ -23,13 +23,29 @@ public class Node_Skill_Tree : MonoBehaviour
 
     private void Awake()
     {
-        switch(this.tag)
+        switch (this.tag)
+        {
+            case "HPNode":
+                BuffValue = 5;
+                break;
+            case "RangeNode":
+                BuffValue = 0.5f;
+                break;
+            case "ASPNode":
+                BuffValue = 0.9f;
+                break;
+        }
+
+        switch (this.tag)
         {
             case "HPNode":
                 Bufftext.text = $"+{BuffValue} HP";
                 break;
             case "RangeNode":
                 Bufftext.text = $"+{BuffValue} Range";
+                break;
+            case "ASPNode":
+                Bufftext.text = $"+{BuffValue} ASP";
                 break;
         }
         
@@ -80,6 +96,10 @@ public class Node_Skill_Tree : MonoBehaviour
                     case "RangeNode":
                         GameTileScript.TurretRange += BuffValue;
                         break;
+                    case "ASPNode":
+                        GameTileScript.TurretAttackSpeed *= BuffValue;
+                        break;
+
                 }
                 Sprite.color = Color.green;
                 break;

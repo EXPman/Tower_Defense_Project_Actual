@@ -17,7 +17,8 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private LineRenderer lineRenderer;
     private bool canAttack = true;
 
-    public static int TurretRange = 4;
+    public static float TurretRange = 2;
+    public static float TurretAttackSpeed = 0.2f;
 
     //Enemy target = null;
 
@@ -100,21 +101,16 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerDown(PointerEventData eventData)
     {
-
-        if(GameManagerScript.gold >= 25)
+        if (!IsBlocked && GameManagerScript.gold >= TurretCost)
         {
             GameManagerScript.gold -= TurretCost;
-
-        if (!IsBlocked && GM.gold >= TurretCost)
-        {
-            //GM.gold -= TurretCost;
             TurretRenderer.enabled = true;
             IsBlocked = true;
             GM.CalculateNewPath();
         }
         else if (IsBlocked)
         {
-            Debug.Log("Une tourelle est dï¿½jï¿½ prï¿½sente sur cette tuile.");
+            Debug.Log("Une tourelle est déjà présente sur cette tuile.");
         }
         else
         {

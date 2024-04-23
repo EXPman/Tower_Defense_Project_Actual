@@ -15,7 +15,7 @@ public class GameManagerScript : MonoBehaviour
     public int XMap = 20;
     public int YMap = 10;
     bool PathAcctive = false;
-    
+
 
 
     [SerializeField] public static int gold = 100;
@@ -178,7 +178,7 @@ public class GameManagerScript : MonoBehaviour
     {
         while (!HP_Script.IsGameOver)
         {
-            for (int q = 0; q < 5; q++) 
+            for (int q = 0; q < 5; q++)
             {
                 if (HP_Script.IsGameOver)  // Vérifie à nouveau ici avant de commencer à créer les ennemis
                     yield break;
@@ -195,5 +195,4 @@ public class GameManagerScript : MonoBehaviour
             }
         }
     }
-
 }

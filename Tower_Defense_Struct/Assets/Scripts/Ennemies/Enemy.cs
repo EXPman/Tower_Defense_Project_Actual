@@ -17,7 +17,6 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         allEnnemies.Add(this);
-        Debug.Log("ennemy created");
     }
 
     //private void OnEnable()
@@ -71,7 +70,7 @@ public class Enemy : MonoBehaviour
         }
         else
         {
-            Debug.Log("L'ennemi a dï¿½jï¿½ ï¿½tï¿½ retirï¿½ de la liste.");
+            Debug.Log("L'ennemi a déjà été retiré de la liste.");
         }
     }
 
