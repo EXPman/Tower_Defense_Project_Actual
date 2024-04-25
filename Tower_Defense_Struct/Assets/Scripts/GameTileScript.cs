@@ -5,12 +5,12 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UIElements;
 
-public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler, IPointerClickHandler
+public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitHandler, IPointerDownHandler
 {
     private SpriteRenderer spriteRenderer;
     private Color originalColor;
     public static int TurretACost = 25;
-    public static int TurretBCost = 40; 
+    public static int TurretBCost = 40;
 
     [SerializeField] SpriteRenderer HoverRenderer;
     [SerializeField] SpriteRenderer TurretARenderer;
@@ -82,25 +82,6 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         spriteRenderer.color = Color.gray;
     }
 
-    public void OnPointerClick(PointerEventData eventData)
-    {
-        TowerManager towerManager = new TowerManager();
-
-        if (towerManager.CanPlaceTowerHere() && !IsBlocked)
-        {
-            PlaceTower(towerManager.GetSelectedTower());
-        }
-    }
-
-    private void PlaceTower(GameObject towerPrefab)
-    {
-        if (towerPrefab != null)
-        {
-            Instantiate(towerPrefab, transform.position, Quaternion.identity);
-            IsBlocked = true;
-        }
-    }
-
     public void OnPointerEnter(PointerEventData eventData)
     {
         HoverRenderer.enabled = true;
@@ -119,31 +100,39 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        if (!IsBlocked)
+        TowerManager towerManager = new TowerManager();
+
+        if (IsBlocked)
         {
-            if (GameManagerScript.gold >= TurretACost)
-            {
-                GameManagerScript.gold -= TurretACost; // Déduire le coût de la tour A
-                TurretARenderer.enabled = true; // Activer le rendu pour la tour A
-                IsBlocked = true; // Bloquer la tuile pour empêcher d'autres tours d'être placées ici
-                GM.CalculateNewPath(); // Recalculer le chemin
-            }
-            else if (GameManagerScript.gold >= TurretBCost)
-            {
-                GameManagerScript.gold -= TurretBCost; // Déduire le coût de la tour B
-                TurretBRenderer.enabled = true; // Activer le rendu pour la tour B
-                IsBlocked = true; // Bloquer la tuile
-                GM.CalculateNewPath(); // Recalculer le chemin
-            }
-            else
-            {
-                Debug.Log("Pas assez d'or pour placer une tour.");
-            }
+            Debug.Log("Une tourelle est déjà présente sur cette tuile.");
+            return;
+        }
+
+        if (!towerManager.CanPlaceTowerHere())
+        {
+            Debug.Log("Aucune tour sélectionnée. Sélectionnez une tour avant de placer.");
+            return;
+        }
+
+        if (GameManagerScript.gold >= TurretACost)
+        {
+            GameManagerScript.gold -= TurretACost; // Déduire le coût de la tour A
+            TurretARenderer.enabled = true; // Activer le rendu pour la tour A
+            IsBlocked = true; // Bloquer la tuile pour empêcher d'autres tours d'être placées ici
+            GM.CalculateNewPath(); // Recalculer le chemin
+        }
+        else if (GameManagerScript.gold >= TurretBCost)
+        {
+            GameManagerScript.gold -= TurretBCost; // Déduire le coût de la tour B
+            TurretBRenderer.enabled = true; // Activer le rendu pour la tour B
+            IsBlocked = true; // Bloquer la tuile
+            GM.CalculateNewPath(); // Recalculer le chemin
         }
         else
         {
-            Debug.Log("Une tourelle est déjà présente sur cette tuile.");
+            Debug.Log("Pas assez d'or pour placer une tour.");
         }
+
 
     }
 
