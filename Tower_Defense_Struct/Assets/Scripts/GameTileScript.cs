@@ -47,8 +47,11 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             {
                 if (Vector3.Distance(transform.position, ennemy.transform.position) < TurretRange)
                 {
-                    target = ennemy;
-                    break;
+                    if(target.tag != "Camo")
+                    {
+                        target = ennemy;
+                        break;
+                    }
                 }
             }
 
@@ -100,7 +103,6 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        TowerManager towerManager = new TowerManager();
 
         if (IsBlocked)
         {
@@ -108,7 +110,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             return;
         }
 
-        if (!towerManager.CanPlaceTowerHere())
+        if (!TowerManager.Singleton.CanPlaceTowerHere())
         {
             Debug.Log("Aucune tour sélectionnée. Sélectionnez une tour avant de placer.");
             return;

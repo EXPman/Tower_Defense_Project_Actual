@@ -12,22 +12,26 @@ public class Enemy : MonoBehaviour
     public static HashSet<Enemy> allEnnemies = new HashSet<Enemy>();
     private bool reachedEnd = false;
 
-    int hp = 3;
+    public int hp = 3;
+    public float speed = 2;
+    public int GoldDrop = 1;
 
     private void Awake()
     {
+        EnnemyTypes.Singleton.SetType(this);
+        switch(this.tag)
+        {
+            case "healer":
+                this.GetComponent<HealerScript>().enabled = true;
+                break;
+            case "flying":
+                this.GetComponent<FlyingScript>().enabled = true;
+                break;
+            default:
+                break;
+        }
         allEnnemies.Add(this);
     }
-
-    //private void OnEnable()
-    //{
-    //    HP_Script.OnGameOver += DestroySelf;
-    //}
-
-    //private void OnDisable()
-    //{
-    //    HP_Script.OnGameOver -= DestroySelf;
-    //}
 
     internal void SetPath(List<GameTileScript> pathToGoal)
     {
@@ -44,7 +48,7 @@ public class Enemy : MonoBehaviour
         if (path.Count > 0)
         {
             Vector3 destPos = path.Peek().transform.position;
-            transform.position = Vector3.MoveTowards(transform.position, destPos, 2 * Time.deltaTime);
+            transform.position = Vector3.MoveTowards(transform.position, destPos, speed * Time.deltaTime);
 
             if (Vector3.Distance(transform.position, destPos) < 0.01f)
             {
@@ -62,21 +66,12 @@ public class Enemy : MonoBehaviour
 
     public void DestroySelf()
     {
-        if (allEnnemies.Contains(this))
-        {
-            Debug.Log("Destruction de l'ennemi.");
             allEnnemies.Remove(this);
             Destroy(gameObject);
-        }
-        else
-        {
-            Debug.Log("L'ennemi a déjà été retiré de la liste.");
-        }
     }
 
     internal void Attack()
     {
-        Debug.Log("Attaque en cours, HP avant attaque: " + hp);
         if (--hp <= 0)
         {
             GameManagerScript.gold++;

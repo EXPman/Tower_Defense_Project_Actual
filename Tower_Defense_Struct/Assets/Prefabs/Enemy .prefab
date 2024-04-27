@@ -10,6 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3159687365033963941}
   - component: {fileID: 132454103406342272}
+  - component: {fileID: 4694762361460617515}
+  - component: {fileID: 2833706153272928394}
   m_Layer: 0
   m_Name: 'Enemy '
   m_TagString: Untagged
@@ -46,6 +48,33 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visual: {fileID: 7239635782486155206}
+  hp: 3
+  speed: 2
+  GoldDrop: 1
+--- !u!114 &4694762361460617515
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5875201602659975290}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ca6c6a9db26c682459fc16ce42c8f893, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &2833706153272928394
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5875201602659975290}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b28e790bcbef11745bb725f2871d7743, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &7239635782486155206
 GameObject:
   m_ObjectHideFlags: 0
