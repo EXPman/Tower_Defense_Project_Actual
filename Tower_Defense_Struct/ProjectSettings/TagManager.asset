@@ -7,6 +7,9 @@ TagManager:
   - HPNode
   - RangeNode
   - ASPNode
+  - Camo
+  - EnnemyHealer
+  - Flying
   layers:
   - Default
   - TransparentFX

@@ -6,7 +6,6 @@ public class EnnemyTypes : MonoBehaviour
 {
     public static EnnemyTypes Singleton;
 
-
     void Awake()
     {
         //makes sure the script is singleton
@@ -23,7 +22,7 @@ public class EnnemyTypes : MonoBehaviour
     public void SetType(Enemy E)
     {
         //switch(Random.Range(0,6))
-        switch (2)
+        switch (3)
         {
             case 0: //classic
                 break;
