@@ -4,8 +4,26 @@ using UnityEngine;
 
 public class TowerManager : MonoBehaviour
 {
+
+    public static TowerManager Singleton;
+
+
     public GameObject[] towerPrefebs;
     private GameObject selectedTowerPrefab;
+
+
+    void Awake()
+    {
+        //makes sure the script is singleton
+        if (Singleton == null)
+        {
+            Singleton = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
 
     public void SelectTower(int index)
     {
