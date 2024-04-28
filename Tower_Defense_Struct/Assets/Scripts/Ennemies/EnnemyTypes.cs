@@ -5,6 +5,9 @@ using UnityEngine;
 public class EnnemyTypes : MonoBehaviour
 {
     public static EnnemyTypes Singleton;
+    
+
+
 
     void Awake()
     {
@@ -21,8 +24,8 @@ public class EnnemyTypes : MonoBehaviour
 
     public void SetType(Enemy E)
     {
-        //switch(Random.Range(0,6))
-        switch (3)
+        switch(Random.Range(0,6))
+        //switch (3)
         {
             case 0: //classic
                 break;
@@ -30,6 +33,7 @@ public class EnnemyTypes : MonoBehaviour
                 E.hp = 20;
                 E.speed = 0.8f;
                 E.GoldDrop = 6;
+                E.tag = "Resitant";
                 break;
             case 2: //camo
                 E.hp = 7;
@@ -47,16 +51,14 @@ public class EnnemyTypes : MonoBehaviour
                 E.hp = 8;
                 E.speed = 4.8f;
                 E.GoldDrop = 5;
+                E.tag = "Sprinter";
                 break;
             case 5: //flying
                 E.hp = 8;
                 E.speed = 1.2f;
                 E.GoldDrop = 8;
-                E.tag = "flying";
+                E.tag = "Flying";
                 break;
-
-
-
         }
 
 

@@ -16,18 +16,50 @@ public class Enemy : MonoBehaviour
     public float speed = 2;
     public int GoldDrop = 1;
 
+    [SerializeField] SpriteRenderer ClassicSprite;
+    [SerializeField] SpriteRenderer ResistantSprite;
+    [SerializeField] SpriteRenderer CamoSprite;
+    [SerializeField] SpriteRenderer HealerSprite;
+    [SerializeField] SpriteRenderer SprinterSprite;
+    [SerializeField] SpriteRenderer FlyingSpriteSprite;
+
     private void Awake()
     {
         EnnemyTypes.Singleton.SetType(this);
         switch(this.tag)
         {
-            case "healer":
+            case "Ennemyhealer":
                 this.GetComponent<HealerScript>().enabled = true;
                 break;
             case "flying":
                 this.GetComponent<FlyingScript>().enabled = true;
                 break;
             default:
+                break;
+        }
+        switch (this.tag)
+        {
+            case "Resitant": // resistant
+                ClassicSprite.enabled = false;
+                ResistantSprite.enabled = true;
+                break;
+            case "Camo": //camo
+                ClassicSprite.enabled = false;
+                CamoSprite.enabled = true;
+                break;
+            case "EnnemyHealer": //healer
+                ClassicSprite.enabled = false;
+                HealerSprite.enabled = true;
+                break;
+            case "Sprinter": //sprinter
+                ClassicSprite.enabled = false;
+                SprinterSprite.enabled = true;
+                break;
+            case "Flying": //flying
+                ClassicSprite.enabled = false;
+                FlyingSpriteSprite.enabled = true;
+                break;
+            default: //classic
                 break;
         }
         allEnnemies.Add(this);

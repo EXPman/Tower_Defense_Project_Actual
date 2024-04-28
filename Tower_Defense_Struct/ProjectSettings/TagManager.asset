@@ -10,6 +10,8 @@ TagManager:
   - Camo
   - EnnemyHealer
   - Flying
+  - Resitant
+  - Sprinter
   layers:
   - Default
   - TransparentFX
