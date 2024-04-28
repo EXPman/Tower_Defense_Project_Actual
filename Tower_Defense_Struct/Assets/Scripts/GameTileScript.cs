@@ -119,7 +119,6 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public void OnPointerEnter(PointerEventData eventData)
     {
         HoverRenderer.enabled = true;
-        GM.TargetTile = this;
     }
 
     public void OnPointerExit(PointerEventData eventData)

@@ -46,42 +46,35 @@ public class GameManagerScript : MonoBehaviour
     {
         gameTiles = new GameTileScript[XMap, YMap];
 
-        for (int x = 0; x < XMap; x++)
+        switch (2)
         {
-            for (int y = 0; y < YMap; y++)
-            {
-                var spawnPosition = new Vector3(x-6, y, 0);
-                var tile = Instantiate(GameTilePrefab, spawnPosition, Quaternion.identity);
-                gameTiles[x, y] = tile.GetComponent<GameTileScript>();
-                gameTiles[x, y].GM = this;
-                gameTiles[x, y].X = x;
-                gameTiles[x, y].Y = y;
-
-                if ((x + y) % 2 == 0)
-                {
-                    gameTiles[x, y].TurnGrey();
-                }
-            }
-        }
-        spawnTile = gameTiles[0, 4];
-        spawnTile.SetEnemySpawn();
-        TargetTile = gameTiles[16, 3]; 
-        for(int y = 2; y <= 9; y++)
-        {
-            gameTiles[5, y].SetWall();
-        }
-        
-        for(int y = 0; y <= 7 ; y++)
-        {
-            gameTiles[10, y].SetWall();
+            case 1:
+                //LoadLevel1();
+                break;
+            case 2:
+                LoadLevel2();
+                break;
+            case 3:
+                //LoadLevel3();
+                break;
+            case 4:
+                //LoadLevel4();
+                break;
+            case 5:
+                //LoadLevel5();
+                break;
+            default:
+                //LoadLevel1();
+                LoadLevel2();
+                break;
         }
     }
 
     private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Space) && TargetTile != null)
+        if(Input.GetKeyDown(KeyCode.Space))
         {
-            if (!PathAcctive)
+            if(!PathAcctive)
             {
                 foreach (var T in gameTiles)
                 {
@@ -98,10 +91,15 @@ public class GameManagerScript : MonoBehaviour
                     tile.SetPath(true);
                     tile = path[tile];
                 }
+                //while (TargetTile != null)
+                //{
+                //    pathToGoal.Add(TargetTile);
+                //    TargetTile.SetPath(true);
+                //    TargetTile = path[TargetTile];
+                //}
                 StartCoroutine(SpawnEnemyCoroutine());
 
                 PathAcctive = true;
-
             }
         }
 
@@ -185,6 +183,7 @@ public class GameManagerScript : MonoBehaviour
         turretEButton.interactable = gold >= ECost; 
         GoldText.text = $"Gold: {gold}";
     }
+
 
     public void CalculateNewPath() //C<est pour solve un bug 
     {
@@ -321,5 +320,87 @@ public class GameManagerScript : MonoBehaviour
                 yield return new WaitForSeconds((2f));
             }
         }
+    }
+
+    public void LoadMap()
+    {
+        for (int x = 0; x < XMap; x++)
+        {
+            for (int y = 0; y < YMap; y++)
+            {
+                var spawnPosition = new Vector3(x - 6, y, 0);
+                var tile = Instantiate(GameTilePrefab, spawnPosition, Quaternion.identity);
+                gameTiles[x, y] = tile.GetComponent<GameTileScript>();
+                gameTiles[x, y].GM = this;
+                gameTiles[x, y].X = x;
+                gameTiles[x, y].Y = y;
+
+                if ((x + y) % 2 == 0)
+                {
+                    gameTiles[x, y].TurnGrey();
+                }
+            }
+        }
+    }
+
+    public void LoadLevel1()
+    {
+        LoadMap();
+        spawnTile = gameTiles[0, 4];
+        spawnTile.SetEnemySpawn();
+        TargetTile = gameTiles[16, 3];
+        for (int y = 2; y <= 9; y++)
+        {
+            gameTiles[5, y].SetWall();
+        }
+
+        for (int y = 0; y <= 7; y++)
+        {
+            gameTiles[10, y].SetWall();
+        }
+    }
+
+    public void LoadLevel2()
+    {
+        LoadMap();
+        spawnTile = gameTiles[0, 1];
+        spawnTile.SetEnemySpawn();
+        TargetTile = gameTiles[16, 1];
+        for (int x = 0; x <= 6; x++)
+        {
+            gameTiles[x, 2].SetWall();
+        }
+
+        for (int y = 0; y <= 7; y++)
+        {
+            gameTiles[10, y].SetWall();
+        }
+
+        for (int y = 2; y <= 7; y++)
+        {
+            gameTiles[7, y].SetWall();
+        }
+
+        for (int y = 0; y <= 5; y++)
+        {
+            gameTiles[9, y].SetWall();
+        }
+        for (int y = 0; y <= 5; y++)
+        {
+            gameTiles[11, y].SetWall();
+        }
+        for (int x = 13; x <= 19; x++)
+        {
+            gameTiles[x, 2].SetWall();
+        }
+
+        gameTiles[8, 7].SetWall();
+        gameTiles[12, 7].SetWall();
+
+        for (int y = 2; y <= 7; y++)
+        {
+            gameTiles[13, y].SetWall();
+        }
+
     }
 }
