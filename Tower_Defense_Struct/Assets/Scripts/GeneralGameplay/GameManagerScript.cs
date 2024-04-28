@@ -48,7 +48,7 @@ public class GameManagerScript : MonoBehaviour
         {
             for (int y = 0; y < YMap; y++)
             {
-                var spawnPosition = new Vector3(x, y, 0);
+                var spawnPosition = new Vector3(x-6, y, 0);
                 var tile = Instantiate(GameTilePrefab, spawnPosition, Quaternion.identity);
                 gameTiles[x, y] = tile.GetComponent<GameTileScript>();
                 gameTiles[x, y].GM = this;
