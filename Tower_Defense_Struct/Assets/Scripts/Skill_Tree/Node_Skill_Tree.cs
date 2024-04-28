@@ -45,7 +45,7 @@ public class Node_Skill_Tree : MonoBehaviour
                 Bufftext.text = $"+{BuffValue} Range";
                 break;
             case "ASPNode":
-                Bufftext.text = $"+{BuffValue} ASP";
+                Bufftext.text = $"*{BuffValue} ASP";
                 break;
         }
         
@@ -94,10 +94,10 @@ public class Node_Skill_Tree : MonoBehaviour
                         HP_Script.BonusHP += BuffValue;
                         break;
                     case "RangeNode":
-                        GameTileScript.TurretRange += BuffValue;
+                        GameTileScript.RangeBuff += BuffValue;
                         break;
                     case "ASPNode":
-                        GameTileScript.TurretAttackSpeed *= BuffValue;
+                        GameTileScript.AttackSpeedBuff *= BuffValue;
                         break;
 
                 }

@@ -12,6 +12,11 @@ TagManager:
   - Flying
   - Resitant
   - Sprinter
+  - TurretA
+  - TurretB
+  - TurretC
+  - TurretD
+  - TurretE
   layers:
   - Default
   - TransparentFX

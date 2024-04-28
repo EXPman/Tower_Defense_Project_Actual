@@ -12,9 +12,13 @@ public class Enemy : MonoBehaviour
     public static HashSet<Enemy> allEnnemies = new HashSet<Enemy>();
     private bool reachedEnd = false;
 
+    float InitialSpeed;
+
     public int hp = 3;
     public float speed = 2;
     public int GoldDrop = 1;
+
+    private int freezeCounter = 0;
 
     [SerializeField] SpriteRenderer ClassicSprite;
     [SerializeField] SpriteRenderer ResistantSprite;
@@ -63,6 +67,19 @@ public class Enemy : MonoBehaviour
                 break;
         }
         allEnnemies.Add(this);
+        InitialSpeed = speed;
+    }
+
+    private void FixedUpdate()
+    {
+        if(freezeCounter > 0)
+        {
+            freezeCounter--;
+        }
+        else
+        {
+            speed = InitialSpeed;
+        }
     }
 
     internal void SetPath(List<GameTileScript> pathToGoal)
@@ -102,16 +119,22 @@ public class Enemy : MonoBehaviour
             Destroy(gameObject);
     }
 
-    internal void Attack()
+    internal void Attack(int Damage,string TurretType)
     {
-        if (--hp <= 0)
+        if (hp - Damage <= 0)
         {
             GameManagerScript.gold++;
             DestroySelf(); 
         }
         else
         {
+            hp -= Damage;
             visual.transform.localScale = new Vector3((float)(visual.transform.localScale.x * 0.9), (float)(visual.transform.localScale.x * 0.9), (float)(visual.transform.localScale.x * 0.9));
+            if(TurretType == "TurretD")
+            {
+                speed /= 2;
+                freezeCounter = 60;
+            }
             Debug.Log("ennemy hit");
         }
     }

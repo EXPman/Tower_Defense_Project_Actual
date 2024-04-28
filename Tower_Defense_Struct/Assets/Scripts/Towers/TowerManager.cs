@@ -8,8 +8,8 @@ public class TowerManager : MonoBehaviour
     public static TowerManager Singleton;
 
 
-    public GameObject[] towerPrefebs;
-    private GameObject selectedTowerPrefab;
+    public int NumberOfTowers = 5;
+    public int CurrentTowerIndex = -1;
 
 
     void Awake()
@@ -27,9 +27,9 @@ public class TowerManager : MonoBehaviour
 
     public void SelectTower(int index)
     {
-        if(index >= 0 && index < towerPrefebs.Length)
+        if(index >= 0 && index < NumberOfTowers)
         {
-            selectedTowerPrefab = towerPrefebs[index];
+            CurrentTowerIndex = index;
         }
     }
 
@@ -37,7 +37,7 @@ public class TowerManager : MonoBehaviour
     {
         if(GameManagerScript.gold >= GameTileScript.TurretACost)
         {
-            selectedTowerPrefab = towerPrefebs[0];
+            CurrentTowerIndex = 0;
         }
         else
         {
@@ -49,7 +49,7 @@ public class TowerManager : MonoBehaviour
     {
         if (GameManagerScript.gold >= GameTileScript.TurretBCost)
         {
-            selectedTowerPrefab = towerPrefebs[1]; // Supposons que towerPrefabs[1] est la tour B.
+            CurrentTowerIndex = 1; // Supposons que towerPrefabs[1] est la tour B.
         }
         else
         {
@@ -61,7 +61,7 @@ public class TowerManager : MonoBehaviour
     {
         if (GameManagerScript.gold >= GameTileScript.TurretCCost)
         {
-            selectedTowerPrefab = towerPrefebs[2];
+            CurrentTowerIndex = 2;
         }
         else
         {
@@ -73,7 +73,7 @@ public class TowerManager : MonoBehaviour
     {
         if (GameManagerScript.gold >= GameTileScript.TurretDCost)
         {
-            selectedTowerPrefab = towerPrefebs[3]; // Supposons que towerPrefabs[1] est la tour B.
+            CurrentTowerIndex = 3; // Supposons que towerPrefabs[1] est la tour B.
         }
         else
         {
@@ -84,7 +84,7 @@ public class TowerManager : MonoBehaviour
     {
         if (GameManagerScript.gold >= GameTileScript.TurretECost)
         {
-            selectedTowerPrefab = towerPrefebs[4];
+            CurrentTowerIndex = 4;
         }
         else
         {
@@ -92,13 +92,13 @@ public class TowerManager : MonoBehaviour
         }
     }
 
-    public GameObject GetSelectedTower()
+    public int GetSelectedTower()
     {
-        return selectedTowerPrefab;
+        return CurrentTowerIndex;
     }
 
     public bool CanPlaceTowerHere()
     {
-        return selectedTowerPrefab != null;
+        return CurrentTowerIndex != -1;
     }
 }

@@ -15,6 +15,8 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public static int TurretDCost = 35;
     public static int TurretECost = 70;
 
+    public int CurrentCost = 25;
+
     [SerializeField] SpriteRenderer HoverRenderer;
     [SerializeField] SpriteRenderer TurretARenderer;
     [SerializeField] SpriteRenderer TurretBRenderer;
@@ -26,8 +28,12 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private LineRenderer lineRenderer;
     private bool canAttack = true;
 
-    public static float TurretRange = 2;
-    public static float TurretAttackSpeed = 0.2f;
+    public static float RangeBuff = 0;
+    public static float AttackSpeedBuff = 1;
+
+    public int TurretDamage = 3;
+    public float AttackSpeed = 1.5f;
+    public float Range = 2;
 
     //Enemy target = null;
 
@@ -49,16 +55,24 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     private void Update()
     {
-        if (TurretARenderer.enabled && canAttack)
+        if (this.tag!="Untagged" && canAttack)
         {
             Enemy target = null;
             foreach (var ennemy in Enemy.allEnnemies)
             {
-                if (Vector3.Distance(transform.position, ennemy.transform.position) < TurretRange)
+                if (Vector3.Distance(transform.position, ennemy.transform.position) < (Range+RangeBuff))
                 {
-                    if (target.tag == "Camo")
+                    if (ennemy.tag == "Camo")
                     {
                         if (this.tag != "TurretA")
+                        {
+                            target = ennemy;
+                            break;
+                        }
+                    }
+                    else if(ennemy.tag == "Flying")
+                    {
+                        if(this.tag != "TurretA")
                         {
                             target = ennemy;
                             break;
@@ -86,14 +100,14 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     IEnumerator AttackCoroutine(Enemy target)
     {
-        target.Attack();
+        target.Attack(TurretDamage,this.tag);
         //target.GetComponent<Enemy>().Attack();
         canAttack = false;
         lineRenderer.SetPosition(1, target.transform.position);
         lineRenderer.enabled = true;
         yield return new WaitForSeconds(0.2f);
         lineRenderer.enabled = false;
-        yield return new WaitForSeconds(0.3f);
+        yield return new WaitForSeconds(AttackSpeed*AttackSpeedBuff);
         canAttack = true;
     }
 
@@ -121,45 +135,59 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public void OnPointerDown(PointerEventData eventData)
     {
         TowerManager towerManager = FindAnyObjectByType<TowerManager>();
-        GameObject selectedTower = towerManager.GetSelectedTower();
+        int selectedTower = towerManager.GetSelectedTower();
 
-        if (selectedTower != null)
+        if (selectedTower != -1)
         {
-            int cost = selectedTower == towerManager.towerPrefebs[0] ? TurretACost : TurretBCost;
-
             if (WallRenderer.enabled)
             {
-
-                if (GameManagerScript.gold >= cost)
+                switch(TowerManager.Singleton.CurrentTowerIndex)
                 {
-                    GameManagerScript.gold -= cost;
-                    Instantiate(selectedTower, transform.position, Quaternion.identity);
+                    case 0:
+                        break;
+                    case 1:
+                        CurrentCost = 40;
+                        break;
+                    case 2:
+                        CurrentCost = 55;
+                        break;
+                    case 3:
+                        CurrentCost = 35;
+                        break;
+                    case 4:
+                        CurrentCost = 70;
+                        break;
+                }
+
+
+                if (GameManagerScript.gold >= CurrentCost)
+                {
+                    GameManagerScript.gold -= CurrentCost;
                     IsBlocked = true;
                     GM.CalculateNewPath();
                     towerManager.SelectTower(-1); // Désélectionner la tour
 
                     // Ajout pour gérer le retour à l'état de hover par défaut
                     HoverRenderer.enabled = false; // Désactiver le rendu de hover
-                    if (selectedTower == towerManager.towerPrefebs[0])
+                    switch(selectedTower)
                     {
-                        TurretARenderer.enabled = true;
+                        case 0:
+                            TurretARenderer.enabled = true;
+                            break;
+                        case 1:
+                            TurretBRenderer.enabled = true;
+                            break;
+                        case 2:
+                            TurretCRenderer.enabled = true;
+                            break;
+                        case 3:
+                            TurretDRenderer.enabled = true;
+                            break;
+                        case 4:
+                            TurretERenderer.enabled = true;
+                            break;
                     }
-                    else if (selectedTower == towerManager.towerPrefebs[1])
-                    {
-                        TurretBRenderer.enabled = true;
-                    }
-                    else if (selectedTower == towerManager.towerPrefebs[2])
-                    {
-                        TurretCRenderer.enabled = true;
-                    }
-                    else if (selectedTower == towerManager.towerPrefebs[3])
-                    {
-                        TurretDRenderer.enabled = true;
-                    }
-                    else
-                    {
-                        TurretERenderer.enabled = true;
-                    }
+                    TowerType.Instance.SetType(this);
                 }
                 else
                 {
