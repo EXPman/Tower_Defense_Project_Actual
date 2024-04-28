@@ -30,7 +30,7 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         EnnemyTypes.Singleton.SetType(this);
-        switch(this.tag)
+        switch (this.tag)
         {
             case "Ennemyhealer":
                 this.GetComponent<HealerScript>().enabled = true;
@@ -108,15 +108,15 @@ public class Enemy : MonoBehaviour
         else if (!reachedEnd)
         {
             reachedEnd = true;
-            OnEnemyReachedEnd?.Invoke();
             DestroySelf();
         }
     }
 
     public void DestroySelf()
     {
-            allEnnemies.Remove(this);
-            Destroy(gameObject);
+        allEnnemies.Remove(this);
+        EnemyWave.onEnemyDestroy.Invoke();
+        Destroy(gameObject);
     }
 
     internal void Attack(int Damage,string TurretType)
@@ -124,7 +124,8 @@ public class Enemy : MonoBehaviour
         if (hp - Damage <= 0)
         {
             GameManagerScript.gold++;
-            DestroySelf(); 
+            OnEnemyReachedEnd?.Invoke();
+            DestroySelf();
         }
         else
         {
