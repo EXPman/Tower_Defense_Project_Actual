@@ -35,6 +35,8 @@ public class GameManagerScript : MonoBehaviour
 
     [SerializeField] public static int gold = 100;
 
+    
+
     public GameTileScript TargetTile { get; internal set; }
     List<GameTileScript> pathToGoal = new List<GameTileScript>();
 
