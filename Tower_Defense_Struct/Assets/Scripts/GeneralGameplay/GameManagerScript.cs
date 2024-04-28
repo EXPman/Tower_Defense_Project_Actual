@@ -65,6 +65,16 @@ public class GameManagerScript : MonoBehaviour
         }
         spawnTile = gameTiles[0, 4];
         spawnTile.SetEnemySpawn();
+        TargetTile = gameTiles[16, 3]; 
+        for(int y = 2; y <= 9; y++)
+        {
+            gameTiles[5, y].SetWall();
+        }
+        
+        for(int y = 0; y <= 7 ; y++)
+        {
+            gameTiles[10, y].SetWall();
+        }
     }
 
     private void Update()
@@ -292,6 +302,7 @@ public class GameManagerScript : MonoBehaviour
 
     IEnumerator SpawnEnemyCoroutine()
     {
+        yield return new WaitForSeconds(5f);
         while (!HP_Script.IsGameOver)
         {
             for (int q = 0; q < 5; q++)

@@ -13,7 +13,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public static int TurretBCost = 40;
     public static int TurretCCost = 55;
     public static int TurretDCost = 35;
-    public static int TurretECost = 70; 
+    public static int TurretECost = 70;
 
     [SerializeField] SpriteRenderer HoverRenderer;
     [SerializeField] SpriteRenderer TurretARenderer;
@@ -22,6 +22,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [SerializeField] SpriteRenderer TurretDRenderer;
     [SerializeField] SpriteRenderer TurretERenderer;
     [SerializeField] SpriteRenderer SpawnerRenderer;
+    [SerializeField] SpriteRenderer WallRenderer;
     private LineRenderer lineRenderer;
     private bool canAttack = true;
 
@@ -34,6 +35,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public int X { get; internal set; }
     public int Y { get; internal set; }
     public bool IsBlocked { get; private set; }
+    public bool IsWall { get; private set; }
 
     private void Awake()
     {
@@ -54,9 +56,9 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             {
                 if (Vector3.Distance(transform.position, ennemy.transform.position) < TurretRange)
                 {
-                    if(target.tag == "Camo")
+                    if (target.tag == "Camo")
                     {
-                        if(this.tag != "TurretA")
+                        if (this.tag != "TurretA")
                         {
                             target = ennemy;
                             break;
@@ -119,52 +121,54 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     public void OnPointerDown(PointerEventData eventData)
     {
         TowerManager towerManager = FindAnyObjectByType<TowerManager>();
-
-        if (IsBlocked)
-        {
-            Debug.Log("Une tourelle est déjà présente sur cette tuile.");
-            return;
-        }
-
         GameObject selectedTower = towerManager.GetSelectedTower();
 
         if (selectedTower != null)
         {
             int cost = selectedTower == towerManager.towerPrefebs[0] ? TurretACost : TurretBCost;
-            if (GameManagerScript.gold >= cost)
-            {
-                GameManagerScript.gold -= cost;
-                Instantiate(selectedTower, transform.position, Quaternion.identity);
-                IsBlocked = true;
-                GM.CalculateNewPath();
-                towerManager.SelectTower(-1); // Désélectionner la tour
 
-                // Ajout pour gérer le retour à l'état de hover par défaut
-                HoverRenderer.enabled = false; // Désactiver le rendu de hover
-                if (selectedTower == towerManager.towerPrefebs[0])
+            if (WallRenderer.enabled)
+            {
+
+                if (GameManagerScript.gold >= cost)
                 {
-                    TurretARenderer.enabled = true;
-                }
-                else if (selectedTower == towerManager.towerPrefebs[1])
-                {
-                    TurretBRenderer.enabled = true;
-                }
-                else if (selectedTower == towerManager.towerPrefebs[2])
-                {
-                    TurretCRenderer.enabled = true;
-                }
-                else if (selectedTower == towerManager.towerPrefebs[3])
-                {
-                   TurretDRenderer.enabled = true;
+                    GameManagerScript.gold -= cost;
+                    Instantiate(selectedTower, transform.position, Quaternion.identity);
+                    IsBlocked = true;
+                    GM.CalculateNewPath();
+                    towerManager.SelectTower(-1); // Désélectionner la tour
+
+                    // Ajout pour gérer le retour à l'état de hover par défaut
+                    HoverRenderer.enabled = false; // Désactiver le rendu de hover
+                    if (selectedTower == towerManager.towerPrefebs[0])
+                    {
+                        TurretARenderer.enabled = true;
+                    }
+                    else if (selectedTower == towerManager.towerPrefebs[1])
+                    {
+                        TurretBRenderer.enabled = true;
+                    }
+                    else if (selectedTower == towerManager.towerPrefebs[2])
+                    {
+                        TurretCRenderer.enabled = true;
+                    }
+                    else if (selectedTower == towerManager.towerPrefebs[3])
+                    {
+                        TurretDRenderer.enabled = true;
+                    }
+                    else
+                    {
+                        TurretERenderer.enabled = true;
+                    }
                 }
                 else
                 {
-                    TurretERenderer.enabled = true;
+                    Debug.Log("Pas assez d'or pour placer une tour.");
                 }
             }
             else
             {
-                Debug.Log("Pas assez d'or pour placer une tour.");
+                Debug.Log("Les ne sont posable que sur les murs");
             }
         }
         else
@@ -176,5 +180,12 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     internal void SetPath(bool isPath)
     {
         spriteRenderer.color = isPath ? Color.green : originalColor;
+    }
+
+    internal void SetWall()
+    {
+        WallRenderer.enabled = true;
+        IsWall = true;
+        IsBlocked = true; 
     }
 }
