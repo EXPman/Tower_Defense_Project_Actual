@@ -57,6 +57,41 @@ public class TowerManager : MonoBehaviour
         }
     }
 
+    public void OnTurrerCButtonClicked()
+    {
+        if (GameManagerScript.gold >= GameTileScript.TurretCCost)
+        {
+            selectedTowerPrefab = towerPrefebs[2];
+        }
+        else
+        {
+            Debug.Log("Pas assez d'or pour la tourelle C.");
+        }
+    }
+
+    public void OnTurretDButtonClicked()
+    {
+        if (GameManagerScript.gold >= GameTileScript.TurretDCost)
+        {
+            selectedTowerPrefab = towerPrefebs[3]; // Supposons que towerPrefabs[1] est la tour B.
+        }
+        else
+        {
+            Debug.Log("Pas assez d'or pour la tourelle D.");
+        }
+    }
+    public void OnTurrerEButtonClicked()
+    {
+        if (GameManagerScript.gold >= GameTileScript.TurretECost)
+        {
+            selectedTowerPrefab = towerPrefebs[4];
+        }
+        else
+        {
+            Debug.Log("Pas assez d'or pour la tourelle E.");
+        }
+    }
+
     public GameObject GetSelectedTower()
     {
         return selectedTowerPrefab;

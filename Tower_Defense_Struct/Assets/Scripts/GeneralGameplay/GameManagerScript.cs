@@ -19,10 +19,19 @@ public class GameManagerScript : MonoBehaviour
 
     [SerializeField] private Button turretAButton;
     [SerializeField] private Button turretBButton;
+    [SerializeField] private Button turretCButton;
+    [SerializeField] private Button turretDButton;
+    [SerializeField] private Button turretEButton;
     [SerializeField] private TMP_Text Aprice;
     [SerializeField] private TMP_Text Bprice;
+    [SerializeField] private TMP_Text Cprice;
+    [SerializeField] private TMP_Text Dprice;
+    [SerializeField] private TMP_Text Eprice;
     int ACost = GameTileScript.TurretACost; 
     int BCost = GameTileScript.TurretBCost;
+    int CCost = GameTileScript.TurretCCost;
+    int DCost = GameTileScript.TurretDCost;
+    int ECost = GameTileScript.TurretECost;
 
     [SerializeField] public static int gold = 100;
 
@@ -112,6 +121,44 @@ public class GameManagerScript : MonoBehaviour
             turretBButton.interactable = true; // Rendre le bouton interactif
         }
 
+        if(gold < CCost)
+        {
+            turretCButton.GetComponent<Image>().color = Color.gray;
+            Cprice.color = Color.red;
+            turretCButton.interactable= false;
+        }
+        else 
+        {
+            turretCButton.GetComponent <Image>().color = Color.cyan;
+            Cprice.color = Color.white;
+            turretCButton.interactable = true;
+        }
+
+        if (gold < DCost)
+        {
+            turretDButton.GetComponent<Image>().color = Color.gray;
+            Dprice.color = Color.red;
+            turretDButton.interactable = false;
+        }
+        else
+        {
+            turretDButton.GetComponent <Image>().color= Color.cyan;
+            Dprice.color = Color.white;
+            turretDButton.interactable = true;
+        }
+
+        if(gold < ECost)
+        {
+            turretEButton.GetComponent<Image>().color = Color.gray;
+            Eprice.color = Color.red;
+            turretEButton.interactable = false; 
+        }
+        else
+        {
+            turretEButton.GetComponent<Image>().color= Color.cyan;
+            Eprice.color = Color.white;
+            turretEButton.interactable = true;
+        }
         GoldText.text = $"Gold: {gold}";
 
     }
@@ -121,6 +168,9 @@ public class GameManagerScript : MonoBehaviour
         gold += amount;
         turretAButton.interactable = gold >= ACost;
         turretBButton.interactable = gold >= BCost;
+        turretCButton.interactable = gold >= CCost;
+        turretDButton.interactable = gold >= DCost;
+        turretEButton.interactable = gold >= ECost; 
         GoldText.text = $"Gold: {gold}";
     }
 

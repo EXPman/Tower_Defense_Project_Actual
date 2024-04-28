@@ -11,10 +11,16 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     private Color originalColor;
     public static int TurretACost = 25;
     public static int TurretBCost = 40;
+    public static int TurretCCost = 55;
+    public static int TurretDCost = 35;
+    public static int TurretECost = 70; 
 
     [SerializeField] SpriteRenderer HoverRenderer;
     [SerializeField] SpriteRenderer TurretARenderer;
     [SerializeField] SpriteRenderer TurretBRenderer;
+    [SerializeField] SpriteRenderer TurretCRenderer;
+    [SerializeField] SpriteRenderer TurretDRenderer;
+    [SerializeField] SpriteRenderer TurretERenderer;
     [SerializeField] SpriteRenderer SpawnerRenderer;
     private LineRenderer lineRenderer;
     private bool canAttack = true;
@@ -128,9 +134,21 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
                 {
                     TurretARenderer.enabled = true;
                 }
-                else
+                else if (selectedTower == towerManager.towerPrefebs[1])
                 {
                     TurretBRenderer.enabled = true;
+                }
+                else if (selectedTower == towerManager.towerPrefebs[2])
+                {
+                    TurretCRenderer.enabled = true;
+                }
+                else if (selectedTower == towerManager.towerPrefebs[3])
+                {
+                   TurretDRenderer.enabled = true;
+                }
+                else
+                {
+                    TurretERenderer.enabled = true;
                 }
             }
             else
