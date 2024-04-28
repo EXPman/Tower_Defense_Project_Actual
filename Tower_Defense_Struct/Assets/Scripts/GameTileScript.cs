@@ -36,6 +36,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
         lineRenderer.SetPosition(0, transform.position);
         spriteRenderer = GetComponent<SpriteRenderer>();
         TurretARenderer.enabled = false;
+        TurretBRenderer.enabled = false;
     }
 
     private void Update()
@@ -100,7 +101,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public void OnPointerDown(PointerEventData eventData)
     {
-        TowerManager towerManager = new TowerManager();
+        TowerManager towerManager = FindAnyObjectByType<TowerManager>();
 
         if (IsBlocked)
         {
@@ -108,32 +109,39 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
             return;
         }
 
-        if (!towerManager.CanPlaceTowerHere())
-        {
-            Debug.Log("Aucune tour sélectionnée. Sélectionnez une tour avant de placer.");
-            return;
-        }
+        GameObject selectedTower = towerManager.GetSelectedTower();
 
-        if (GameManagerScript.gold >= TurretACost)
+        if (selectedTower != null)
         {
-            GameManagerScript.gold -= TurretACost; // Déduire le coût de la tour A
-            TurretARenderer.enabled = true; // Activer le rendu pour la tour A
-            IsBlocked = true; // Bloquer la tuile pour empêcher d'autres tours d'être placées ici
-            GM.CalculateNewPath(); // Recalculer le chemin
-        }
-        else if (GameManagerScript.gold >= TurretBCost)
-        {
-            GameManagerScript.gold -= TurretBCost; // Déduire le coût de la tour B
-            TurretBRenderer.enabled = true; // Activer le rendu pour la tour B
-            IsBlocked = true; // Bloquer la tuile
-            GM.CalculateNewPath(); // Recalculer le chemin
+            int cost = selectedTower == towerManager.towerPrefebs[0] ? TurretACost : TurretBCost;
+            if (GameManagerScript.gold >= cost)
+            {
+                GameManagerScript.gold -= cost;
+                Instantiate(selectedTower, transform.position, Quaternion.identity);
+                IsBlocked = true;
+                GM.CalculateNewPath();
+                towerManager.SelectTower(-1); // Désélectionner la tour
+
+                // Ajout pour gérer le retour à l'état de hover par défaut
+                HoverRenderer.enabled = false; // Désactiver le rendu de hover
+                if (selectedTower == towerManager.towerPrefebs[0])
+                {
+                    TurretARenderer.enabled = true;
+                }
+                else
+                {
+                    TurretBRenderer.enabled = true;
+                }
+            }
+            else
+            {
+                Debug.Log("Pas assez d'or pour placer une tour.");
+            }
         }
         else
         {
-            Debug.Log("Pas assez d'or pour placer une tour.");
+            Debug.Log("Aucune tour sélectionnée. Sélectionnez une tour avant de placer.");
         }
-
-
     }
 
     internal void SetPath(bool isPath)
