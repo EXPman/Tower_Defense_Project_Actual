@@ -21,7 +21,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     [SerializeField] SpriteRenderer TurretCRenderer;
     [SerializeField] SpriteRenderer TurretDRenderer;
     [SerializeField] SpriteRenderer TurretERenderer;
-    [SerializeField] SpriteRenderer SpawnerRenderer;
+    [SerializeField] public SpriteRenderer SpawnerRenderer;
     [SerializeField] SpriteRenderer WallRenderer;
     private LineRenderer lineRenderer;
     private bool canAttack = true;

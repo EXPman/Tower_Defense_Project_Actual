@@ -13,7 +13,6 @@ public class MainMenuUI : MonoBehaviour
     private void Start()
     {
         LevelPanel.SetActive(false);
-
     }
 
     public void loadLevelSelection()

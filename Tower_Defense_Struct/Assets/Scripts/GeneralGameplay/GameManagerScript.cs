@@ -8,6 +8,8 @@ using UnityEngine.UI;
 
 public class GameManagerScript : MonoBehaviour
 {
+    public static GameManagerScript Instance;
+
     [SerializeField] GameObject GameTilePrefab;
     [SerializeField] GameObject EnemyPrefab;
     [SerializeField] TMP_Text GoldText;
@@ -27,15 +29,13 @@ public class GameManagerScript : MonoBehaviour
     [SerializeField] private TMP_Text Cprice;
     [SerializeField] private TMP_Text Dprice;
     [SerializeField] private TMP_Text Eprice;
-    int ACost = GameTileScript.TurretACost; 
+    int ACost = GameTileScript.TurretACost;
     int BCost = GameTileScript.TurretBCost;
     int CCost = GameTileScript.TurretCCost;
     int DCost = GameTileScript.TurretDCost;
     int ECost = GameTileScript.TurretECost;
 
     [SerializeField] public static int gold = 100;
-
-    
 
     public GameTileScript TargetTile { get; internal set; }
     List<GameTileScript> pathToGoal = new List<GameTileScript>();
@@ -44,13 +44,18 @@ public class GameManagerScript : MonoBehaviour
 
     private void Awake()
     {
+        if (Instance == null)
+            Instance = this;
+        else
+            Destroy(gameObject);
+
         gameTiles = new GameTileScript[XMap, YMap];
 
         for (int x = 0; x < XMap; x++)
         {
             for (int y = 0; y < YMap; y++)
             {
-                var spawnPosition = new Vector3(x-6, y, 0);
+                var spawnPosition = new Vector3(x - 6, y, 0);
                 var tile = Instantiate(GameTilePrefab, spawnPosition, Quaternion.identity);
                 gameTiles[x, y] = tile.GetComponent<GameTileScript>();
                 gameTiles[x, y].GM = this;
@@ -65,13 +70,13 @@ public class GameManagerScript : MonoBehaviour
         }
         spawnTile = gameTiles[0, 4];
         spawnTile.SetEnemySpawn();
-        TargetTile = gameTiles[16, 3]; 
-        for(int y = 2; y <= 9; y++)
+        TargetTile = gameTiles[16, 3];
+        for (int y = 2; y <= 9; y++)
         {
             gameTiles[5, y].SetWall();
         }
-        
-        for(int y = 0; y <= 7 ; y++)
+
+        for (int y = 0; y <= 7; y++)
         {
             gameTiles[10, y].SetWall();
         }
@@ -133,15 +138,15 @@ public class GameManagerScript : MonoBehaviour
             turretBButton.interactable = true; // Rendre le bouton interactif
         }
 
-        if(gold < CCost)
+        if (gold < CCost)
         {
             turretCButton.GetComponent<Image>().color = Color.gray;
             Cprice.color = Color.red;
-            turretCButton.interactable= false;
+            turretCButton.interactable = false;
         }
-        else 
+        else
         {
-            turretCButton.GetComponent <Image>().color = Color.cyan;
+            turretCButton.GetComponent<Image>().color = Color.cyan;
             Cprice.color = Color.white;
             turretCButton.interactable = true;
         }
@@ -154,20 +159,20 @@ public class GameManagerScript : MonoBehaviour
         }
         else
         {
-            turretDButton.GetComponent <Image>().color= Color.cyan;
+            turretDButton.GetComponent<Image>().color = Color.cyan;
             Dprice.color = Color.white;
             turretDButton.interactable = true;
         }
 
-        if(gold < ECost)
+        if (gold < ECost)
         {
             turretEButton.GetComponent<Image>().color = Color.gray;
             Eprice.color = Color.red;
-            turretEButton.interactable = false; 
+            turretEButton.interactable = false;
         }
         else
         {
-            turretEButton.GetComponent<Image>().color= Color.cyan;
+            turretEButton.GetComponent<Image>().color = Color.cyan;
             Eprice.color = Color.white;
             turretEButton.interactable = true;
         }
@@ -182,7 +187,7 @@ public class GameManagerScript : MonoBehaviour
         turretBButton.interactable = gold >= BCost;
         turretCButton.interactable = gold >= CCost;
         turretDButton.interactable = gold >= DCost;
-        turretEButton.interactable = gold >= ECost; 
+        turretEButton.interactable = gold >= ECost;
         GoldText.text = $"Gold: {gold}";
     }
 
@@ -300,9 +305,8 @@ public class GameManagerScript : MonoBehaviour
 
     }
 
-    IEnumerator SpawnEnemyCoroutine()
+    public IEnumerator SpawnEnemyCoroutine()
     {
-        yield return new WaitForSeconds(5f);
         while (!HP_Script.IsGameOver)
         {
             for (int q = 0; q < 5; q++)
