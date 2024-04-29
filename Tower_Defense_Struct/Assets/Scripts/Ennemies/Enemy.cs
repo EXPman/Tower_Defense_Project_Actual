@@ -34,6 +34,42 @@ public class Enemy : MonoBehaviour
     private void Awake()
     {
         EnnemyTypes.Singleton.SetType(this);
+        switch (this.tag)
+        {
+            case "Ennemyhealer":
+                this.GetComponent<HealerScript>().enabled = true;
+                break;
+            case "Flying":
+                this.GetComponent<FlyingScript>().enabled = true;
+                break;
+            default:
+                break;
+        }
+        switch (this.tag)
+        {
+            case "Resitant": // resistant
+                ClassicSprite.enabled = false;
+                ResistantSprite.enabled = true;
+                break;
+            case "Camo": //camo
+                ClassicSprite.enabled = false;
+                CamoSprite.enabled = true;
+                break;
+            case "EnnemyHealer": //healer
+                ClassicSprite.enabled = false;
+                HealerSprite.enabled = true;
+                break;
+            case "Sprinter": //sprinter
+                ClassicSprite.enabled = false;
+                SprinterSprite.enabled = true;
+                break;
+            case "Flying": //flying
+                ClassicSprite.enabled = false;
+                FlyingSpriteSprite.enabled = true;
+                break;
+            default: //classic
+                break;
+        }
         allEnnemies.Add(this);
         InitialSpeed = speed;
     }
@@ -79,6 +115,7 @@ public class Enemy : MonoBehaviour
         else if (!reachedEnd)
         {
             reachedEnd = true;
+            OnEnemyReachedEnd?.Invoke();
             DestroySelf();
         }
     }
@@ -86,7 +123,6 @@ public class Enemy : MonoBehaviour
     public void DestroySelf()
     {
         allEnnemies.Remove(this);
-        OnEnemyDestroyed?.Invoke(this);
         Destroy(gameObject);
     }
 

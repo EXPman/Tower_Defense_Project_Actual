@@ -53,7 +53,8 @@ public class GameManagerScript : MonoBehaviour
 
         gameTiles = new GameTileScript[XMap, YMap];
 
-        switch (5)
+        //switch (LevelManager.Singleton.LevelIndex)
+        switch(1)
         {
             case 1:
                 LoadLevel1();
@@ -109,7 +110,8 @@ public class GameManagerScript : MonoBehaviour
                 //    TargetTile.SetPath(true);
                 //    TargetTile = path[TargetTile];
                 //}
-                int enemiesToSpawn = enemyWave.enemiesPerWave();
+                //int enemiesToSpawn = enemyWave.enemiesPerWave();
+                int enemiesToSpawn = 5;
                 StartCoroutine(SpawnEnemyCoroutine(enemiesToSpawn));
 
                 PathAcctive = true;
@@ -314,21 +316,25 @@ public class GameManagerScript : MonoBehaviour
 
     public IEnumerator SpawnEnemyCoroutine(int numberOfEnemies)
     {
-        int enemiesSpawned = 0;
-        while (!HP_Script.IsGameOver && enemiesSpawned < numberOfEnemies)
+        while(true)
         {
-            if (HP_Script.IsGameOver)
-                yield break;
+            int enemiesSpawned = 0;
+            while (!HP_Script.IsGameOver)
+            {
+                if (HP_Script.IsGameOver)
+                    yield break;
 
-            yield return new WaitForSeconds(0.5f);
-            var enemy = Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity).GetComponent<Enemy>();
-            EnnemyTypes.Singleton.SetType(enemy); // Set the type of the enemy
-            enemy.TargetTile = TargetTile.transform;
-            enemy.SetPath(pathToGoal);
-            enemiesSpawned++;
+                yield return new WaitForSeconds(0.5f);
+                var enemy = Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity).GetComponent<Enemy>();
+                enemy.TargetTile = TargetTile.transform;
+                enemy.SetPath(pathToGoal);
+                enemiesSpawned++;
 
-            if (enemiesSpawned >= numberOfEnemies)
-                yield break; // Stop spawning if the wave's enemy count is reached
+
+                if (enemiesSpawned >= numberOfEnemies)
+                     break; // Stop spawning if the wave's enemy count is reached
+            }
+            yield return new WaitForSeconds(3);
         }
     }
 

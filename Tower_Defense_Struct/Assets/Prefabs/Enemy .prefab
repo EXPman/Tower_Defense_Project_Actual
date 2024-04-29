@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visual: {fileID: 7239635782486155206}
+  InitialSpeed: 0
   hp: 3
   speed: 2
   GoldDrop: 1
@@ -234,6 +235,7 @@ MonoBehaviour:
   HealerSprite: {fileID: 1248411306724318791}
   SprinterSprite: {fileID: 5564140948085575128}
   FlyingSpriteSprite: {fileID: 2849042671277185902}
+  TargetTile: {fileID: 0}
 --- !u!114 &4694762361460617515
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -259,6 +261,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b28e790bcbef11745bb725f2871d7743, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  TargetTile: {fileID: 0}
+  speed: 1.2
 --- !u!58 &7781205973082252205
 CircleCollider2D:
   m_ObjectHideFlags: 0

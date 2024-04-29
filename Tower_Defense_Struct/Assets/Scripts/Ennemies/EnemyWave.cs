@@ -21,7 +21,7 @@ public class EnemyWave : MonoBehaviour
     private float timeSinceLastSpawn;
     private int enemiesAlive;
     private int enemiesTotal;
-    private bool isSpawning = false;
+    public static bool isSpawning = false;
 
     private void Start()
     {
@@ -64,7 +64,6 @@ public class EnemyWave : MonoBehaviour
         isSpawning = false;
         timeSinceLastSpawn = 0f;
         currentWave++;
-
     }
 
     private void OnDestroy()
@@ -77,7 +76,7 @@ public class EnemyWave : MonoBehaviour
         enemiesAlive--;
         Debug.Log($"Il reste {enemiesAlive} ennemis vivants dans cette vague.");
 
-        if (enemiesAlive == 0 && enemiesTotal == 0)
+        if (enemiesAlive == 0 || enemiesTotal == 0)
         {
             EndWave();
         }
@@ -93,8 +92,10 @@ public class EnemyWave : MonoBehaviour
         }
 
         // Calculer le nombre d'ennemis, en s'assurant qu'il est toujours positif
-        float calculatedEnemies = baseEnemies * Mathf.Pow(currentWave, difficultyScaling);
-        int enemiesToSpawn = Mathf.Max(1, Mathf.RoundToInt(calculatedEnemies)); // Assurez-vous de toujours générer au moins un ennemi
-        return enemiesToSpawn;
+        //float calculatedEnemies = baseEnemies * currentWave;
+        int calculatedEnemies = baseEnemies * currentWave;
+        //int enemiesToSpawn = Mathf.Max(1, Mathf.RoundToInt(calculatedEnemies)); // Assurez-vous de toujours générer au moins un ennemi
+        //return enemiesToSpawn;
+        return calculatedEnemies;
     }
 }

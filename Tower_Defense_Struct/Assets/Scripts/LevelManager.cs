@@ -22,4 +22,28 @@ public class LevelManager : MonoBehaviour
         DontDestroyOnLoad(this);
     }
 
+    public void OnClick1()
+    {
+        LevelIndex = 1;
+    }
+
+    public void OnClick2()
+    {
+        LevelIndex = 2;
+    }
+
+    public void OnClick3()
+    {
+        LevelIndex = 3;
+    }
+
+    public void OnClick4()
+    {
+        LevelIndex = 4;
+    }
+
+    public void OnClick5()
+    {
+        LevelIndex = 5;
+    }
 }

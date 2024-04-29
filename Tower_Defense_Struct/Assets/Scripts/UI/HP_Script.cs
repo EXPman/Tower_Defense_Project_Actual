@@ -45,7 +45,6 @@ public class HP_Script : MonoBehaviour
                 EndGame();
             }
         }
-       
     }
 
     private void EndGame()

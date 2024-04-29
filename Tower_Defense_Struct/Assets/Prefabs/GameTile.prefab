@@ -107,6 +107,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b1874cab47e85d2409b061ad50b730d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  CurrentCost: 25
   HoverRenderer: {fileID: 7489756049130636423}
   TurretARenderer: {fileID: 7275062042016751844}
   TurretBRenderer: {fileID: 6530619796811711681}
@@ -115,6 +116,9 @@ MonoBehaviour:
   TurretERenderer: {fileID: 4586454261584586670}
   SpawnerRenderer: {fileID: 2317732371566398641}
   WallRenderer: {fileID: 8981919398672232445}
+  TurretDamage: 3
+  AttackSpeed: 1.5
+  Range: 2
 --- !u!61 &5004031395949521517
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -506,7 +510,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: 7ce16c63ba627427cab935593c090e34, type: 3}
-  m_Color: {r: 0.41568628, g: 0.3019608, b: 0.2509804, a: 1}
+  m_Color: {r: 0.764151, g: 0.47296003, b: 0.34242615, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -674,7 +678,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: ed130aac49764ad4f9d35454c297b75a, type: 3}
-  m_Color: {r: 0.3882353, g: 0.83137256, b: 0.41568628, a: 1}
+  m_Color: {r: 0, g: 1, b: 0.06194687, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0
@@ -842,7 +846,7 @@ SpriteRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 2
   m_Sprite: {fileID: 21300000, guid: af77273b34edb4bacbace0efd118bf1a, type: 3}
-  m_Color: {r: 0, g: 0.7647059, b: 1, a: 1}
+  m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 0

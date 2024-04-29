@@ -24,8 +24,8 @@ public class EnnemyTypes : MonoBehaviour
 
     public void SetType(Enemy E)
     {
-        switch(Random.Range(0,6))
-        //switch (3)
+        //switch(Random.Range(0,6))
+        switch (4)
         {
             case 0: //classic
                 break;
@@ -60,8 +60,5 @@ public class EnnemyTypes : MonoBehaviour
                 E.tag = "Flying";
                 break;
         }
-
-
-
     }
 }
