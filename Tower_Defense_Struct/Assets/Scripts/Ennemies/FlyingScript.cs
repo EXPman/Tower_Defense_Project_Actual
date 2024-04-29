@@ -1,18 +1,19 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class FlyingScript : MonoBehaviour
 {
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+    public Transform TargetTile; // Position de la tuile cible
+    public float speed = 1.2f;
 
-    // Update is called once per frame
-    void Update()
+    private void Update()
     {
-        
+        if (TargetTile != null)
+        {
+            // Déplace l'ennemi volant vers la cible
+            transform.position = Vector3.MoveTowards(transform.position, TargetTile.position, speed * Time.deltaTime);
+        }
     }
 }
