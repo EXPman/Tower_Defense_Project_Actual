@@ -53,8 +53,8 @@ public class GameManagerScript : MonoBehaviour
 
         gameTiles = new GameTileScript[XMap, YMap];
 
-        //switch (LevelManager.Singleton.LevelIndex)
-        switch(1)
+        switch (LevelManager.Singleton.LevelIndex)
+        //switch(1)
         {
             case 1:
                 LoadLevel1();
