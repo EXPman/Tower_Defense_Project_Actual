@@ -17,6 +17,7 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
 
     public int CurrentCost = 25;
 
+    [SerializeField] SpriteRenderer PathRender;
     [SerializeField] SpriteRenderer HoverRenderer;
     [SerializeField] SpriteRenderer TurretARenderer;
     [SerializeField] SpriteRenderer TurretBRenderer;
@@ -207,6 +208,10 @@ public class GameTileScript : MonoBehaviour, IPointerEnterHandler, IPointerExitH
     internal void SetPath(bool isPath)
     {
         spriteRenderer.color = isPath ? Color.green : originalColor;
+        if(isPath == true)
+        {
+            PathRender.enabled = true;
+        }
     }
 
     internal void SetWall()

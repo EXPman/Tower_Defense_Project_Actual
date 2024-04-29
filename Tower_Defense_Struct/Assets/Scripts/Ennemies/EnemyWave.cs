@@ -7,79 +7,45 @@ using UnityEngine.Events;
 
 public class EnemyWave : MonoBehaviour
 {
-    [SerializeField] private GameObject spawner;
-    [SerializeField] private Sprite[] enemyPrefabs;
+    public static EnemyWave Singleton;
+
+    //[SerializeField] private GameObject spawner;
+    //[SerializeField] private Sprite[] enemyPrefabs;
     [SerializeField] private int totalWaves = 5;
     [SerializeField] private int baseEnemies = 6;
-    [SerializeField] private float difficultyScaling = 0.75f;
+    [SerializeField] private int difficultyScaling = 1;
     [SerializeField] private float timeBetweenWaves = 5f;
     [SerializeField] private float enemiesPerSecond = 0.5f;
 
     public static UnityEvent onEnemyDestroy;
 
-    private int currentWave = 1;
+    public int currentWave = 1;
     private float timeSinceLastSpawn;
-    private int enemiesAlive;
+    public int enemiesAlive;
     private int enemiesTotal;
     public static bool isSpawning = false;
 
+    void Awake()
+    {
+        //makes sure the script is singleton
+        if (Singleton == null)
+        {
+            Singleton = this;
+        }
+        else
+        {
+            Destroy(this.gameObject);
+        }
+    }
+
     private void Start()
     {
-        StartCoroutine(StartWave());
-        Enemy.OnEnemyDestroyed += EnemyDestroyed;
-    }
-
-    private void Update()
-    {
-        if (!isSpawning) return;
-
-        timeSinceLastSpawn += Time.deltaTime;
-
-        if (timeSinceLastSpawn >= (1f / enemiesPerSecond) && enemiesTotal > 0)
+        if(LevelManager.Singleton != null)
         {
-            Debug.Log("Spawn enemies");
-            enemiesTotal--;
-            enemiesAlive++;
-            timeSinceLastSpawn = 0f;
-            Debug.Log($"Il reste {enemiesTotal} ennemis à générer dans cette vague.");
+            difficultyScaling = LevelManager.Singleton.LevelIndex;
         }
-
-        if (enemiesAlive == 0 && enemiesTotal == 0)
-        {
-            EndWave();
-        }
-    }
-
-    private IEnumerator StartWave()
-    {
-        yield return new WaitForSeconds(timeBetweenWaves);
-        isSpawning = true;
-        enemiesTotal = enemiesPerWave();
-        GameManagerScript.Instance.TriggerEnemyWave(enemiesTotal);
-
-    }
-
-    private void EndWave()
-    {
-        isSpawning = false;
-        timeSinceLastSpawn = 0f;
-        currentWave++;
-    }
-
-    private void OnDestroy()
-    {
-        Enemy.OnEnemyDestroyed -= EnemyDestroyed;
-    }
-
-    private void EnemyDestroyed(Enemy enemy)
-    {
-        enemiesAlive--;
-        Debug.Log($"Il reste {enemiesAlive} ennemis vivants dans cette vague.");
-
-        if (enemiesAlive == 0 || enemiesTotal == 0)
-        {
-            EndWave();
-        }
+        baseEnemies *= difficultyScaling;
+        DontDestroyOnLoad(this);
     }
 
     public int enemiesPerWave()

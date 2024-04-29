@@ -12,6 +12,7 @@ public class GameManagerScript : MonoBehaviour
 
     private EnemyWave enemyWave;
 
+    [SerializeField] WinScreen_Script WinScreen;
     [SerializeField] GameObject GameTilePrefab;
     [SerializeField] GameObject EnemyPrefab;
     [SerializeField] TMP_Text GoldText;
@@ -21,6 +22,7 @@ public class GameManagerScript : MonoBehaviour
     public int YMap = 10;
     bool PathAcctive = false;
 
+    [SerializeField] private TMP_Text WaveText;
     [SerializeField] private Button turretAButton;
     [SerializeField] private Button turretBButton;
     [SerializeField] private Button turretCButton;
@@ -54,7 +56,7 @@ public class GameManagerScript : MonoBehaviour
         gameTiles = new GameTileScript[XMap, YMap];
 
         switch (LevelManager.Singleton.LevelIndex)
-        //switch(1)
+        //switch(4)
         {
             case 1:
                 LoadLevel1();
@@ -73,7 +75,7 @@ public class GameManagerScript : MonoBehaviour
                 break;
             default:
                 //LoadLevel1();
-                LoadLevel2();
+                LoadLevel1();
                 break;
         }
     }
@@ -111,8 +113,8 @@ public class GameManagerScript : MonoBehaviour
                 //    TargetTile = path[TargetTile];
                 //}
                 //int enemiesToSpawn = enemyWave.enemiesPerWave();
-                int enemiesToSpawn = 5;
-                StartCoroutine(SpawnEnemyCoroutine(enemiesToSpawn));
+                //int enemiesToSpawn = 5;
+                StartCoroutine(SpawnEnemyCoroutine());
 
                 PathAcctive = true;
             }
@@ -311,13 +313,13 @@ public class GameManagerScript : MonoBehaviour
         if (u.Y + 1 < YMap)
             result.Add(gameTiles[u.X, u.Y + 1]);
         return result;
-
     }
 
-    public IEnumerator SpawnEnemyCoroutine(int numberOfEnemies)
+    public IEnumerator SpawnEnemyCoroutine()
     {
         while(true)
         {
+            int numberOfEnemies = EnemyWave.Singleton.enemiesPerWave();
             int enemiesSpawned = 0;
             while (!HP_Script.IsGameOver)
             {
@@ -325,23 +327,35 @@ public class GameManagerScript : MonoBehaviour
                     yield break;
 
                 yield return new WaitForSeconds(0.5f);
+                
                 var enemy = Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity).GetComponent<Enemy>();
                 enemy.TargetTile = TargetTile.transform;
                 enemy.SetPath(pathToGoal);
+                EnemyWave.Singleton.enemiesAlive++;
                 enemiesSpawned++;
-
 
                 if (enemiesSpawned >= numberOfEnemies)
                      break; // Stop spawning if the wave's enemy count is reached
             }
-            yield return new WaitForSeconds(3);
+            while(EnemyWave.Singleton.enemiesAlive >0)
+            {
+                yield return new WaitForSeconds(5);
+            }
+            if(EnemyWave.Singleton.currentWave >= 5)
+            {
+                WinScreen.ActivateWinScreen();
+                break;
+            }
+            EnemyWave.Singleton.currentWave++;
+            WaveText.text = EnemyWave.Singleton.currentWave.ToString();
+            yield return new WaitForSeconds(2);
         }
     }
 
-    public void TriggerEnemyWave(int numberOfEnemies)
-    {
-        StartCoroutine(SpawnEnemyCoroutine(numberOfEnemies));
-    }
+    //public void TriggerEnemyWave(int numberOfEnemies)
+    //{
+    //    StartCoroutine(SpawnEnemyCoroutine());
+    //}
 
     public void LoadMap()
     {
@@ -356,10 +370,10 @@ public class GameManagerScript : MonoBehaviour
                 gameTiles[x, y].X = x;
                 gameTiles[x, y].Y = y;
 
-                if ((x + y) % 2 == 0)
-                {
-                    gameTiles[x, y].TurnGrey();
-                }
+                //if ((x + y) % 2 == 0)
+                //{
+                //    gameTiles[x, y].TurnGrey();
+                //}
             }
         }
     }

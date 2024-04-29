@@ -24,8 +24,8 @@ public class EnnemyTypes : MonoBehaviour
 
     public void SetType(Enemy E)
     {
-        //switch(Random.Range(0,6))
-        switch (4)
+        switch(Random.Range(0,6))
+        //switch (5)
         {
             case 0: //classic
                 break;

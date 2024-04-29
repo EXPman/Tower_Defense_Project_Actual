@@ -9,6 +9,10 @@ public class SceneChanger : MonoBehaviour
 
     public void LoadScene(string sceneName)
     {
+        if(sceneName == "Level1")
+        {
+            GameManagerScript.gold = 100;
+        }
         SceneManager.LoadScene(sceneName);
     }
 

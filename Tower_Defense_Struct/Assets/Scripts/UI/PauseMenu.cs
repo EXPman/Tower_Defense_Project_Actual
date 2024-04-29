@@ -36,9 +36,12 @@ public class PauseMenu : MonoBehaviour
 
     public void Continue()
     {
-        isPaused = false;
-        PausePanel.SetActive(false);
-        Time.timeScale = 1f;
+        if(!HP_Script.IsGameOver)
+        {
+            isPaused = false;
+            PausePanel.SetActive(false);
+            Time.timeScale = 1f;
+        }
     }
     public void Restart()
     {

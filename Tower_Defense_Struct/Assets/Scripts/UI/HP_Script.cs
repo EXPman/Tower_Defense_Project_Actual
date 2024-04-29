@@ -6,7 +6,9 @@ using System;
 
 public class HP_Script : MonoBehaviour
 {
+    [SerializeField] GameObject PausePanel;
     [SerializeField] TMP_Text HPtext;
+    [SerializeField] TMP_Text winText;
     public static float HPvalue = 50;
     public static float BonusHP;
 
@@ -52,5 +54,12 @@ public class HP_Script : MonoBehaviour
         StopAllCoroutines(); //Les enemmies ne spawn plus 
         Debug.Log("Game Over");
 
+    }
+
+    private void WinGame()
+    {
+        winText.text = "Game Over \nYou Win";
+        PausePanel.SetActive(true);
+        Time.timeScale = 0f;
     }
 }

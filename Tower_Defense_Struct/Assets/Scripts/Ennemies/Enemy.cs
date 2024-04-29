@@ -98,10 +98,19 @@ public class Enemy : MonoBehaviour
 
     void Update()
     {
-        if (tag == "Flying" && TargetTile != null)
+        if (tag == "Flying")
         {
-            // Move flying enemies directly towards the target tile
-            transform.position = Vector3.MoveTowards(transform.position, TargetTile.position, speed * Time.deltaTime);
+            if(TargetTile != null && transform.position != TargetTile.position)
+            {
+                // Move flying enemies directly towards the target tile
+                transform.position = Vector3.MoveTowards(transform.position, TargetTile.position, speed * Time.deltaTime);
+            }
+            else
+            {
+                reachedEnd = true;
+                OnEnemyReachedEnd?.Invoke();
+                DestroySelf();
+            }
         }
         else if (path.Count > 0)
         {
@@ -125,6 +134,8 @@ public class Enemy : MonoBehaviour
     {
         Instantiate(Particle, transform.position, Quaternion.identity);
         allEnnemies.Remove(this);
+        EnemyWave.Singleton.enemiesAlive--;
+        Debug.Log($"{EnemyWave.Singleton.enemiesAlive} enemiesAlive");
         Destroy(gameObject);
     }
 
