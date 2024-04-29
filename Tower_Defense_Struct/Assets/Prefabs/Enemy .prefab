@@ -225,6 +225,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   visual: {fileID: 7239635782486155206}
+  Particle: {fileID: 8304334759116383052, guid: 5d8e295961cead547af85b3d9d20715e, type: 3}
   InitialSpeed: 0
   hp: 3
   speed: 2

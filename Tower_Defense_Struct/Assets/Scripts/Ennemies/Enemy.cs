@@ -7,6 +7,7 @@ using UnityEngine;
 public class Enemy : MonoBehaviour
 {
     [SerializeField] GameObject visual;
+    [SerializeField] GameObject Particle;
     private Stack<GameTileScript> path = new Stack<GameTileScript>();
     public static event Action OnEnemyReachedEnd;
     public static HashSet<Enemy> allEnnemies = new HashSet<Enemy>();
@@ -122,6 +123,7 @@ public class Enemy : MonoBehaviour
 
     public void DestroySelf()
     {
+        Instantiate(Particle, transform.position, Quaternion.identity);
         allEnnemies.Remove(this);
         Destroy(gameObject);
     }
