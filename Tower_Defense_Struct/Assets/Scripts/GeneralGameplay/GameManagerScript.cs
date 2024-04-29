@@ -10,6 +10,8 @@ public class GameManagerScript : MonoBehaviour
 {
     public static GameManagerScript Instance;
 
+    private EnemyWave enemyWave;
+
     [SerializeField] GameObject GameTilePrefab;
     [SerializeField] GameObject EnemyPrefab;
     [SerializeField] TMP_Text GoldText;
@@ -75,6 +77,11 @@ public class GameManagerScript : MonoBehaviour
         }
     }
 
+    private void Start()
+    {
+       enemyWave = FindObjectOfType<EnemyWave>();   
+    }
+
     private void Update()
     {
         if(Input.GetKeyDown(KeyCode.Space))
@@ -102,7 +109,8 @@ public class GameManagerScript : MonoBehaviour
                 //    TargetTile.SetPath(true);
                 //    TargetTile = path[TargetTile];
                 //}
-                StartCoroutine(SpawnEnemyCoroutine());
+                int enemiesToSpawn = enemyWave.enemiesPerWave();
+                StartCoroutine(SpawnEnemyCoroutine(enemiesToSpawn));
 
                 PathAcctive = true;
             }
@@ -304,26 +312,27 @@ public class GameManagerScript : MonoBehaviour
 
     }
 
-    public IEnumerator SpawnEnemyCoroutine()
+    public IEnumerator SpawnEnemyCoroutine(int numberOfEnemies)
     {
-        while (!HP_Script.IsGameOver)
+        int enemiesSpawned = 0;
+        while (!HP_Script.IsGameOver && enemiesSpawned < numberOfEnemies)
         {
-            for (int q = 0; q < 5; q++)
-            {
-                if (HP_Script.IsGameOver)  // Vérifie à nouveau ici avant de commencer à créer les ennemis
-                    yield break;
-                for (int i = 0; i < 5; i++)
-                {
-                    if (HP_Script.IsGameOver) //vérifie avant chaque ennemi
-                        yield break;
+            if (HP_Script.IsGameOver)
+                yield break;
 
-                    yield return new WaitForSeconds(0.5f);
-                    var enemy = Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity).GetComponent<Enemy>();
-                    enemy.SetPath(pathToGoal);
-                }
-                yield return new WaitForSeconds((2f));
-            }
+            yield return new WaitForSeconds(0.5f);
+            var enemy = Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity).GetComponent<Enemy>();
+            enemy.SetPath(pathToGoal);
+            enemiesSpawned++;
+
+            if (enemiesSpawned >= numberOfEnemies)
+                yield break; // Stop spawning if the wave's enemy count is reached
         }
+    }
+
+    public void TriggerEnemyWave(int numberOfEnemies)
+    {
+        StartCoroutine(SpawnEnemyCoroutine(numberOfEnemies));
     }
 
     public void LoadMap()

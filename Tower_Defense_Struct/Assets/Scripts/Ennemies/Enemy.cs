@@ -27,6 +27,8 @@ public class Enemy : MonoBehaviour
     [SerializeField] SpriteRenderer SprinterSprite;
     [SerializeField] SpriteRenderer FlyingSpriteSprite;
 
+    public static event Action<Enemy> OnEnemyDestroyed;
+
     private void Awake()
     {
         EnnemyTypes.Singleton.SetType(this);
@@ -72,7 +74,7 @@ public class Enemy : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if(freezeCounter > 0)
+        if (freezeCounter > 0)
         {
             freezeCounter--;
         }
@@ -115,23 +117,22 @@ public class Enemy : MonoBehaviour
     public void DestroySelf()
     {
         allEnnemies.Remove(this);
-        EnemyWave.onEnemyDestroy.Invoke();
+        OnEnemyDestroyed?.Invoke(this);
         Destroy(gameObject);
     }
 
-    internal void Attack(int Damage,string TurretType)
+    internal void Attack(int Damage, string TurretType)
     {
         if (hp - Damage <= 0)
         {
             GameManagerScript.gold++;
-            OnEnemyReachedEnd?.Invoke();
             DestroySelf();
         }
         else
         {
             hp -= Damage;
             visual.transform.localScale = new Vector3((float)(visual.transform.localScale.x * 0.9), (float)(visual.transform.localScale.x * 0.9), (float)(visual.transform.localScale.x * 0.9));
-            if(TurretType == "TurretD")
+            if (TurretType == "TurretD")
             {
                 speed /= 2;
                 freezeCounter = 60;
