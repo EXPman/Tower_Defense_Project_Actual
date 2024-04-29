@@ -322,6 +322,8 @@ public class GameManagerScript : MonoBehaviour
 
             yield return new WaitForSeconds(0.5f);
             var enemy = Instantiate(EnemyPrefab, spawnTile.transform.position, Quaternion.identity).GetComponent<Enemy>();
+            EnnemyTypes.Singleton.SetType(enemy); // Set the type of the enemy
+            enemy.TargetTile = TargetTile.transform;
             enemy.SetPath(pathToGoal);
             enemiesSpawned++;
 
