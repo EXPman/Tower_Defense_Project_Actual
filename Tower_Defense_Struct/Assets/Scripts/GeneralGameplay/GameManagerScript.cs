@@ -53,22 +53,22 @@ public class GameManagerScript : MonoBehaviour
 
         gameTiles = new GameTileScript[XMap, YMap];
 
-        switch (2)
+        switch (5)
         {
             case 1:
-                //LoadLevel1();
+                LoadLevel1();
                 break;
             case 2:
                 LoadLevel2();
                 break;
             case 3:
-                //LoadLevel3();
+                LoadLevel3();
                 break;
             case 4:
-                //LoadLevel4();
+                LoadLevel4();
                 break;
             case 5:
-                //LoadLevel5();
+                LoadLevel5();
                 break;
             default:
                 //LoadLevel1();
@@ -361,7 +361,7 @@ public class GameManagerScript : MonoBehaviour
         LoadMap();
         spawnTile = gameTiles[0, 4];
         spawnTile.SetEnemySpawn();
-        TargetTile = gameTiles[16, 3];
+        TargetTile = gameTiles[11, 1];
         for (int y = 2; y <= 9; y++)
         {
             gameTiles[5, y].SetWall();
@@ -378,7 +378,7 @@ public class GameManagerScript : MonoBehaviour
         LoadMap();
         spawnTile = gameTiles[0, 1];
         spawnTile.SetEnemySpawn();
-        TargetTile = gameTiles[16, 1];
+        TargetTile = gameTiles[19, 1];
         for (int x = 0; x <= 6; x++)
         {
             gameTiles[x, 2].SetWall();
@@ -407,13 +407,166 @@ public class GameManagerScript : MonoBehaviour
             gameTiles[x, 2].SetWall();
         }
 
-        gameTiles[8, 7].SetWall();
-        gameTiles[12, 7].SetWall();
+        for (int y = 7; y <= 8; y++)
+        {
+            gameTiles[8, y].SetWall();
+        }
+
+        for (int y = 7; y <= 8; y++)
+        {
+            gameTiles[12, y].SetWall();
+        }
+
+        
 
         for (int y = 2; y <= 7; y++)
         {
             gameTiles[13, y].SetWall();
         }
 
+        for (int x = 8; x <= 12; x++)
+        {
+            gameTiles[x, 9].SetWall();
+        }
+    }
+
+    public void LoadLevel3()
+    {
+        LoadMap();
+        spawnTile = gameTiles[0, 5];
+        spawnTile.SetEnemySpawn();
+        TargetTile = gameTiles[19, 5];
+        for (int x = 0; x <= 4; x++)
+        {
+            gameTiles[x, 4].SetWall();
+        }
+
+        for (int y = 0; y <= 6; y++)
+        {
+            gameTiles[5, y].SetWall();
+        }
+
+        gameTiles[1, 5].SetWall();
+
+        for (int y = 6; y <= 9; y++)
+        {
+            gameTiles[3, y].SetWall();
+        }
+
+        for (int y = 3; y <= 9; y++)
+        {
+            gameTiles[7, y].SetWall();
+        }
+
+        for (int y = 0; y <= 6; y++)
+        {
+            gameTiles[9, y].SetWall();
+        }
+
+        for (int y = 2; y <= 9; y++)
+        {
+            gameTiles[11, y].SetWall();
+        }
+
+        for (int y = 0; y <= 5; y++)
+        {
+            gameTiles[13, y].SetWall();
+        }
+
+        gameTiles[14, 5].SetWall();
+
+        for (int y = 2; y <= 5; y++)
+        {
+            gameTiles[15, y].SetWall();
+        }
+
+        for (int y = 4; y <= 9; y++)
+        {
+            gameTiles[17, y].SetWall();
+        }
+    }
+
+    public void LoadLevel4()
+    {
+        LoadMap();
+        spawnTile = gameTiles[5, 9];
+        spawnTile.SetEnemySpawn();
+        TargetTile = gameTiles[7, 9];
+        for (int y = 6; y <= 9; y++)
+        {
+            gameTiles[6, y].SetWall();
+        }
+
+        for (int y = 7; y <= 9; y++)
+        {
+            gameTiles[4, y].SetWall();
+        }
+
+        for (int y = 0; y <= 9; y++)
+        {
+            gameTiles[3, y].SetWall();
+        }
+
+        for (int y = 2; y <= 4; y++)
+        {
+            gameTiles[5, y].SetWall();
+        }
+
+        for (int x = 5; x <= 16; x++)
+        {
+            gameTiles[x, 5].SetWall();
+        }
+
+        for (int x = 5; x <= 17; x++)
+        {
+            gameTiles[x, 1].SetWall();
+        }
+
+        for (int y = 2; y <= 6; y++)
+        {
+            gameTiles[17, y].SetWall();
+        }
+
+        for (int x = 8; x <= 15; x++)
+        {
+            gameTiles[x, 7].SetWall();
+        }
+
+        for (int y = 8; y <= 9; y++)
+        {
+            gameTiles[15, y].SetWall();
+        }
+    }
+
+    public void LoadLevel5()
+    {
+        LoadMap();
+        spawnTile = gameTiles[0, 9];
+        spawnTile.SetEnemySpawn();
+        TargetTile = gameTiles[9, 0];
+        for (int x = 1; x <= 19; x++)
+        {
+            gameTiles[x, 9].SetWall();
+        }
+
+        for (int x = 0; x <= 18; x++)
+        {
+            gameTiles[x, 7].SetWall();
+        }
+
+        for (int x = 1; x <= 19; x++)
+        {
+            gameTiles[x, 5].SetWall();
+        }
+
+        for (int x = 0; x <= 18; x++)
+        {
+            gameTiles[x, 3].SetWall();
+        }
+
+        for (int x = 1; x <= 19; x++)
+        {
+            gameTiles[x, 1].SetWall();
+        }
     }
 }

@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class LevelManager : MonoBehaviour
 {
-    public byte LevelIndex = 2;
+    public byte LevelIndex = 1;
 
     public static LevelManager Singleton;
 
