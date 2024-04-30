@@ -5,18 +5,20 @@ using UnityEngine.SceneManagement;
 
 public class NewBehaviourScript : MonoBehaviour
 {
+    public static int TempWaveIndex = 1;
+    public static int TempEXP = 10;
 
-    void Update()
+    public void LoadSkillTreeScene()
     {
-        if(Input.GetKeyDown(KeyCode.Tab))
-        {
-            SceneManager.LoadScene("InLevelScene");
-            //SceneManager.SetActiveScene(SceneManager.GetSceneByName("InLevelScene"));
-        }
+        TempWaveIndex = EnemyWave.Singleton.currentWave;
+        TempEXP = EXPScript.EXP;
+        SceneManager.LoadScene("SkillTreeScene");
     }
 
-    public void LoadSkillTreeScene(string sceneName)
+    public void LoadLevel1Scene()
     {
-        SceneManager.LoadScene(sceneName);
+        EnemyWave.Singleton.currentWave = TempWaveIndex;
+        EXPScript.EXP = TempEXP; 
+        SceneManager.LoadScene("Level1");
     }
 }

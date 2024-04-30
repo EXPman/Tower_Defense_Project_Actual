@@ -12,6 +12,7 @@ public class GameManagerScript : MonoBehaviour
 
     private EnemyWave enemyWave;
 
+    [SerializeField] TMP_Text EXPText;
     [SerializeField] WinScreen_Script WinScreen;
     [SerializeField] GameObject GameTilePrefab;
     [SerializeField] GameObject EnemyPrefab;
@@ -106,14 +107,6 @@ public class GameManagerScript : MonoBehaviour
                     tile.SetPath(true);
                     tile = path[tile];
                 }
-                //while (TargetTile != null)
-                //{
-                //    pathToGoal.Add(TargetTile);
-                //    TargetTile.SetPath(true);
-                //    TargetTile = path[TargetTile];
-                //}
-                //int enemiesToSpawn = enemyWave.enemiesPerWave();
-                //int enemiesToSpawn = 5;
                 StartCoroutine(SpawnEnemyCoroutine());
 
                 PathAcctive = true;
@@ -346,6 +339,8 @@ public class GameManagerScript : MonoBehaviour
                 WinScreen.ActivateWinScreen();
                 break;
             }
+            EXPScript.EXP = EnemyWave.Singleton.currentWave * 10;
+            EXPText.text = $"EXP: {EXPScript.EXP}";
             EnemyWave.Singleton.currentWave++;
             WaveText.text = EnemyWave.Singleton.currentWave.ToString();
             yield return new WaitForSeconds(2);

@@ -11,6 +11,7 @@ public class Node_Skill_Tree : MonoBehaviour
     [SerializeField] SpriteRenderer Sprite;
     [SerializeField] TMP_Text Bufftext;
     [SerializeField] float BuffValue = 1f;
+    private int Price;
 
     public enum NodeState
     {
@@ -59,7 +60,10 @@ public class Node_Skill_Tree : MonoBehaviour
         }
         else
         {
-            SetState(NodeState.available);
+            if(EXPScript.EXP >= Price)
+            {
+                SetState(NodeState.available);
+            }
         }
 
     }
@@ -69,7 +73,7 @@ public class Node_Skill_Tree : MonoBehaviour
         if(CurrentStatus == NodeState.available)
         {
             SetState(NodeState.Claimed);
-            if(ChildNodes != null)
+            if(ChildNodes != null && EXPScript.EXP >= Price)
             {
                 foreach(Node_Skill_Tree STNode in ChildNodes)
                 {
@@ -102,6 +106,7 @@ public class Node_Skill_Tree : MonoBehaviour
 
                 }
                 Sprite.color = Color.green;
+                EXPScript.EXP -= Price;
                 break;
             case NodeState.Locked:
                 Sprite.color = Color.red;
